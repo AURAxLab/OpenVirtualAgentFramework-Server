@@ -309,8 +309,11 @@ pytest tests/ -v
 ## � Author
 
 **Alexander Barquero Elizondo, Ph.D.**
+
 📧 [alexander.barqueroelizondo@ucr.ac.cr](mailto:alexander.barqueroelizondo@ucr.ac.cr)
+
 Profesor e Investigador — ECCI / CITIC
+
 [Universidad de Costa Rica (UCR)](https://www.ucr.ac.cr)
 
 ---
