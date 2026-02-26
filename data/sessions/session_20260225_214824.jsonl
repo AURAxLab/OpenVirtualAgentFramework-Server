@@ -1,0 +1,49 @@
+{"session_id": "20260225_214824", "file": "data\\sessions\\session_20260225_214824.jsonl", "event": "Telemetry Session Started", "timestamp": "2026-02-26T03:48:24.729246Z"}
+{"transport_type": "ZMQTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T03:48:26.549085Z"}
+{"transport_type": "WebSocketTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T03:48:26.549218Z"}
+{"experiment": "Pilot Emotion Study", "event": "Starting OpenVirtualAgentFramework Server...", "timestamp": "2026-02-26T03:48:27.802488Z"}
+{"address": "tcp://*:5555", "event": "ZMQ Publisher bound", "timestamp": "2026-02-26T03:48:27.803072Z"}
+{"address": "tcp://*:5556", "event": "ZMQ Subscriber bound", "timestamp": "2026-02-26T03:48:27.804554Z"}
+{"event": "ZMQ Transport started.", "timestamp": "2026-02-26T03:48:27.804620Z"}
+{"event": "WebSocket Transport initialized (Awaiting FastAPI mount).", "timestamp": "2026-02-26T03:48:27.804645Z"}
+{"total_connections": 1, "event": "WebSocket client connected", "timestamp": "2026-02-26T03:48:32.319265Z"}
+{"new_provider": "gemini", "event": "Orchestrator: LLM Provider Swapped", "timestamp": "2026-02-26T03:48:47.042182Z"}
+{"event": "Orchestrator: System Prompt Updated", "timestamp": "2026-02-26T03:48:47.042279Z"}
+{"new_provider": "gemini", "event": "Orchestrator: LLM Provider Swapped", "timestamp": "2026-02-26T03:48:52.283118Z"}
+{"event": "Orchestrator: System Prompt Updated", "timestamp": "2026-02-26T03:48:52.283216Z"}
+{"prompt": "Hola que tal soy Alex", "event": "Orchestrator: Asking LLM...", "timestamp": "2026-02-26T03:49:00.899413Z"}
+{"text": "Hola Alex, encantado de conocerte. Soy tu asistente virtual.", "actions": {"emotions": "neutral", "looks": "user", "actions": "nod"}, "event": "Orchestrator: LLM Reply", "timestamp": "2026-02-26T03:49:02.401767Z"}
+{"host_timestamp": 1772077742.401869, "sender": "server_orchestrator", "target_device": "all", "target_agent": "agent_alpha", "command_type": "message", "command": "llm_reply", "subcommand": {"text": "Hola Alex, encantado de conocerte. Soy tu asistente virtual.", "provider": "gemini", "model": "gemini-2.5-flash", "agent": "agent_alpha"}, "event": "interaction", "timestamp": "2026-02-26T03:49:02.401873Z"}
+{"topic": "framework.cmd", "message_len": 284, "event": "ZMQ Published message", "timestamp": "2026-02-26T03:49:02.402262Z"}
+{"host_timestamp": 1772077742.4026003, "sender": "server_orchestrator", "target_device": "quest_vr_01", "target_agent": "agent_alpha", "command_type": "action", "command": "execute_state", "subcommand": {"emotions": "neutral", "looks": "user", "actions": "nod"}, "event": "interaction", "timestamp": "2026-02-26T03:49:02.402605Z"}
+{"topic": "framework.cmd", "message_len": 208, "event": "ZMQ Published message", "timestamp": "2026-02-26T03:49:02.402812Z"}
+{"error": "'async for' requires an object with __aiter__ method, got generator", "event": "TTS Streaming failed", "timestamp": "2026-02-26T03:49:04.505802Z"}
+{"prompt": "Como me llamo?", "event": "Orchestrator: Asking LLM...", "timestamp": "2026-02-26T03:49:24.433224Z"}
+{"text": "Te llamas Alex.", "actions": {"emotions": "neutral", "looks": "user", "actions": "nod"}, "event": "Orchestrator: LLM Reply", "timestamp": "2026-02-26T03:49:25.852993Z"}
+{"host_timestamp": 1772077765.853172, "sender": "server_orchestrator", "target_device": "all", "target_agent": "agent_alpha", "command_type": "message", "command": "llm_reply", "subcommand": {"text": "Te llamas Alex.", "provider": "gemini", "model": "gemini-2.5-flash", "agent": "agent_alpha"}, "event": "interaction", "timestamp": "2026-02-26T03:49:25.853177Z"}
+{"topic": "framework.cmd", "message_len": 239, "event": "ZMQ Published message", "timestamp": "2026-02-26T03:49:25.853683Z"}
+{"host_timestamp": 1772077765.8540976, "sender": "server_orchestrator", "target_device": "quest_vr_01", "target_agent": "agent_alpha", "command_type": "action", "command": "execute_state", "subcommand": {"emotions": "neutral", "looks": "user", "actions": "nod"}, "event": "interaction", "timestamp": "2026-02-26T03:49:25.854102Z"}
+{"topic": "framework.cmd", "message_len": 208, "event": "ZMQ Published message", "timestamp": "2026-02-26T03:49:25.854461Z"}
+{"error": "'async for' requires an object with __aiter__ method, got generator", "event": "TTS Streaming failed", "timestamp": "2026-02-26T03:49:28.073527Z"}
+{"prompt": "Que mas sabes de mi?", "event": "Orchestrator: Asking LLM...", "timestamp": "2026-02-26T03:49:31.950487Z"}
+{"text": "Hasta ahora, solo s\u00e9 que te llamas Alex. \u00bfHay algo m\u00e1s que te gustar\u00eda compartir conmigo?", "actions": {"actions": "nod", "looks": "user", "emotions": "neutral"}, "event": "Orchestrator: LLM Reply", "timestamp": "2026-02-26T03:49:33.582751Z"}
+{"host_timestamp": 1772077773.5828428, "sender": "server_orchestrator", "target_device": "all", "target_agent": "agent_alpha", "command_type": "message", "command": "llm_reply", "subcommand": {"text": "Hasta ahora, solo s\u00e9 que te llamas Alex. \u00bfHay algo m\u00e1s que te gustar\u00eda compartir conmigo?", "provider": "gemini", "model": "gemini-2.5-flash", "agent": "agent_alpha"}, "event": "interaction", "timestamp": "2026-02-26T03:49:33.582846Z"}
+{"topic": "framework.cmd", "message_len": 313, "event": "ZMQ Published message", "timestamp": "2026-02-26T03:49:33.583192Z"}
+{"host_timestamp": 1772077773.5834494, "sender": "server_orchestrator", "target_device": "quest_vr_01", "target_agent": "agent_alpha", "command_type": "action", "command": "execute_state", "subcommand": {"actions": "nod", "looks": "user", "emotions": "neutral"}, "event": "interaction", "timestamp": "2026-02-26T03:49:33.583453Z"}
+{"topic": "framework.cmd", "message_len": 208, "event": "ZMQ Published message", "timestamp": "2026-02-26T03:49:33.583737Z"}
+{"error": "'async for' requires an object with __aiter__ method, got generator", "event": "TTS Streaming failed", "timestamp": "2026-02-26T03:49:36.390915Z"}
+{"new_provider": "openai", "event": "Orchestrator: LLM Provider Swapped", "timestamp": "2026-02-26T03:49:38.837776Z"}
+{"event": "Orchestrator: System Prompt Updated", "timestamp": "2026-02-26T03:49:38.837960Z"}
+{"prompt": "Y tu que sabes de mi?", "event": "Orchestrator: Asking LLM...", "timestamp": "2026-02-26T03:49:43.940647Z"}
+{"text": "Por ahora solo s\u00e9 tu nombre, Alex. Cu\u00e9ntame m\u00e1s sobre ti si quieres que te conozca mejor.", "actions": {}, "event": "Orchestrator: LLM Reply", "timestamp": "2026-02-26T03:49:45.689545Z"}
+{"host_timestamp": 1772077785.689652, "sender": "server_orchestrator", "target_device": "all", "target_agent": "agent_alpha", "command_type": "message", "command": "llm_reply", "subcommand": {"text": "Por ahora solo s\u00e9 tu nombre, Alex. Cu\u00e9ntame m\u00e1s sobre ti si quieres que te conozca mejor.", "provider": "openai", "model": "gpt-4o", "agent": "agent_alpha"}, "event": "interaction", "timestamp": "2026-02-26T03:49:45.689655Z"}
+{"topic": "framework.cmd", "message_len": 303, "event": "ZMQ Published message", "timestamp": "2026-02-26T03:49:45.689999Z"}
+{"error": "'async for' requires an object with __aiter__ method, got generator", "event": "TTS Streaming failed", "timestamp": "2026-02-26T03:49:47.618749Z"}
+{"total_connections": 0, "event": "WebSocket client disconnected", "timestamp": "2026-02-26T03:50:15.889172Z"}
+{"total_connections": 1, "event": "WebSocket client connected", "timestamp": "2026-02-26T16:02:31.513388Z"}
+{"total_connections": 0, "event": "WebSocket client disconnected", "timestamp": "2026-02-26T16:03:20.009637Z"}
+{"event": "Stopping ZMQ Transport...", "timestamp": "2026-02-26T16:03:20.117015Z"}
+{"event": "ZMQ Transport stopped.", "timestamp": "2026-02-26T16:03:20.119539Z"}
+{"event": "Stopping WebSocket Transport...", "timestamp": "2026-02-26T16:03:20.119594Z"}
+{"event": "WebSocket Transport stopped.", "timestamp": "2026-02-26T16:03:20.119611Z"}
+{"event": "OAF Server fully stopped.", "timestamp": "2026-02-26T16:03:20.119700Z"}

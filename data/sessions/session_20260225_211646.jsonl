@@ -1,0 +1,40 @@
+{"session_id": "20260225_211646", "file": "data\\sessions\\session_20260225_211646.jsonl", "event": "Telemetry Session Started", "timestamp": "2026-02-26T03:16:46.053366Z"}
+{"transport_type": "ZMQTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T03:16:47.318808Z"}
+{"transport_type": "WebSocketTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T03:16:47.318911Z"}
+{"experiment": "Pilot Emotion Study", "event": "Starting OpenVirtualAgentFramework Server...", "timestamp": "2026-02-26T03:16:48.132678Z"}
+{"address": "tcp://*:5555", "event": "ZMQ Publisher bound", "timestamp": "2026-02-26T03:16:48.133126Z"}
+{"address": "tcp://*:5556", "event": "ZMQ Subscriber bound", "timestamp": "2026-02-26T03:16:48.133673Z"}
+{"event": "ZMQ Transport started.", "timestamp": "2026-02-26T03:16:48.133722Z"}
+{"event": "WebSocket Transport initialized (Awaiting FastAPI mount).", "timestamp": "2026-02-26T03:16:48.133739Z"}
+{"total_connections": 1, "event": "WebSocket client connected", "timestamp": "2026-02-26T03:16:53.778237Z"}
+{"new_provider": "gemini", "event": "Orchestrator: LLM Provider Swapped", "timestamp": "2026-02-26T03:16:57.276187Z"}
+{"event": "Orchestrator: System Prompt Updated", "timestamp": "2026-02-26T03:16:57.276348Z"}
+{"prompt": "Esta es una prueba. Me estoy frustrando.", "event": "Orchestrator: Asking LLM...", "timestamp": "2026-02-26T03:17:05.123275Z"}
+{"text": "Entendido. Lamento escuchar eso. \u00bfHay algo en lo que pueda ayudarte?", "actions": {"actions": "nod", "emotions": "neutral", "looks": "user"}, "event": "Orchestrator: LLM Reply", "timestamp": "2026-02-26T03:17:06.761787Z"}
+{"host_timestamp": 1772075826.7619445, "sender": "server_orchestrator", "target_device": "all", "target_agent": "agent_alpha", "command_type": "message", "command": "llm_reply", "subcommand": {"text": "Entendido. Lamento escuchar eso. \u00bfHay algo en lo que pueda ayudarte?"}, "event": "interaction", "timestamp": "2026-02-26T03:17:06.761949Z"}
+{"topic": "framework.cmd", "message_len": 223, "event": "ZMQ Published message", "timestamp": "2026-02-26T03:17:06.762461Z"}
+{"host_timestamp": 1772075826.7627933, "sender": "server_orchestrator", "target_device": "quest_vr_01", "target_agent": "agent_alpha", "command_type": "action", "command": "execute_state", "subcommand": {"actions": "nod", "emotions": "neutral", "looks": "user"}, "event": "interaction", "timestamp": "2026-02-26T03:17:06.762798Z"}
+{"topic": "framework.cmd", "message_len": 208, "event": "ZMQ Published message", "timestamp": "2026-02-26T03:17:06.763105Z"}
+{"error": "'async for' requires an object with __aiter__ method, got generator", "event": "TTS Streaming failed", "timestamp": "2026-02-26T03:17:09.186914Z"}
+{"prompt": "Hola, estoy frustrado. Tu que piensas?", "event": "Orchestrator: Asking LLM...", "timestamp": "2026-02-26T03:17:24.655320Z"}
+{"text": "Lamento escuchar eso. Quieres hablar de ello?", "actions": {"actions": "nod", "looks": "user", "emotions": "sad"}, "event": "Orchestrator: LLM Reply", "timestamp": "2026-02-26T03:17:26.270901Z"}
+{"host_timestamp": 1772075846.2709982, "sender": "server_orchestrator", "target_device": "all", "target_agent": "agent_alpha", "command_type": "message", "command": "llm_reply", "subcommand": {"text": "Lamento escuchar eso. Quieres hablar de ello?"}, "event": "interaction", "timestamp": "2026-02-26T03:17:26.271001Z"}
+{"topic": "framework.cmd", "message_len": 200, "event": "ZMQ Published message", "timestamp": "2026-02-26T03:17:26.271270Z"}
+{"host_timestamp": 1772075846.271506, "sender": "server_orchestrator", "target_device": "quest_vr_01", "target_agent": "agent_alpha", "command_type": "action", "command": "execute_state", "subcommand": {"actions": "nod", "looks": "user", "emotions": "sad"}, "event": "interaction", "timestamp": "2026-02-26T03:17:26.271510Z"}
+{"topic": "framework.cmd", "message_len": 204, "event": "ZMQ Published message", "timestamp": "2026-02-26T03:17:26.271684Z"}
+{"error": "'async for' requires an object with __aiter__ method, got generator", "event": "TTS Streaming failed", "timestamp": "2026-02-26T03:17:27.904264Z"}
+{"new_provider": "openai", "event": "Orchestrator: LLM Provider Swapped", "timestamp": "2026-02-26T03:18:20.527995Z"}
+{"event": "Orchestrator: System Prompt Updated", "timestamp": "2026-02-26T03:18:20.528088Z"}
+{"prompt": "Esto es una prueba", "event": "Orchestrator: Asking LLM...", "timestamp": "2026-02-26T03:18:25.508370Z"}
+{"text": "Entendido, esto es una prueba.", "actions": {"emotions": "neutral", "actions": "nod", "looks": "user"}, "event": "Orchestrator: LLM Reply", "timestamp": "2026-02-26T03:18:27.374674Z"}
+{"host_timestamp": 1772075907.374846, "sender": "server_orchestrator", "target_device": "all", "target_agent": "agent_alpha", "command_type": "message", "command": "llm_reply", "subcommand": {"text": "Entendido, esto es una prueba."}, "event": "interaction", "timestamp": "2026-02-26T03:18:27.374851Z"}
+{"topic": "framework.cmd", "message_len": 185, "event": "ZMQ Published message", "timestamp": "2026-02-26T03:18:27.375332Z"}
+{"host_timestamp": 1772075907.3756485, "sender": "server_orchestrator", "target_device": "quest_vr_01", "target_agent": "agent_alpha", "command_type": "action", "command": "execute_state", "subcommand": {"emotions": "neutral", "actions": "nod", "looks": "user"}, "event": "interaction", "timestamp": "2026-02-26T03:18:27.375653Z"}
+{"topic": "framework.cmd", "message_len": 208, "event": "ZMQ Published message", "timestamp": "2026-02-26T03:18:27.375896Z"}
+{"error": "'async for' requires an object with __aiter__ method, got generator", "event": "TTS Streaming failed", "timestamp": "2026-02-26T03:18:30.528800Z"}
+{"total_connections": 0, "event": "WebSocket client disconnected", "timestamp": "2026-02-26T03:20:19.348106Z"}
+{"event": "Stopping ZMQ Transport...", "timestamp": "2026-02-26T03:20:21.653675Z"}
+{"event": "ZMQ Transport stopped.", "timestamp": "2026-02-26T03:20:21.655028Z"}
+{"event": "Stopping WebSocket Transport...", "timestamp": "2026-02-26T03:20:21.655094Z"}
+{"event": "WebSocket Transport stopped.", "timestamp": "2026-02-26T03:20:21.655112Z"}
+{"event": "OAF Server fully stopped.", "timestamp": "2026-02-26T03:20:21.655126Z"}

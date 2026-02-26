@@ -1,0 +1,21 @@
+{"session_id": "20260225_211148", "file": "data\\sessions\\session_20260225_211148.jsonl", "event": "Telemetry Session Started", "timestamp": "2026-02-26T03:11:48.343621Z"}
+{"transport_type": "ZMQTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T03:11:49.898994Z"}
+{"transport_type": "WebSocketTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T03:11:49.899081Z"}
+{"experiment": "Pilot Emotion Study", "event": "Starting OpenVirtualAgentFramework Server...", "timestamp": "2026-02-26T03:11:50.626324Z"}
+{"address": "tcp://*:5555", "event": "ZMQ Publisher bound", "timestamp": "2026-02-26T03:11:50.626760Z"}
+{"address": "tcp://*:5556", "event": "ZMQ Subscriber bound", "timestamp": "2026-02-26T03:11:50.627151Z"}
+{"event": "ZMQ Transport started.", "timestamp": "2026-02-26T03:11:50.627193Z"}
+{"event": "WebSocket Transport initialized (Awaiting FastAPI mount).", "timestamp": "2026-02-26T03:11:50.627210Z"}
+{"total_connections": 1, "event": "WebSocket client connected", "timestamp": "2026-02-26T03:11:52.116055Z"}
+{"total_connections": 0, "event": "WebSocket client disconnected", "timestamp": "2026-02-26T03:11:57.569554Z"}
+{"total_connections": 1, "event": "WebSocket client connected", "timestamp": "2026-02-26T03:11:58.151219Z"}
+{"prompt": "Sup", "event": "Orchestrator: Asking LLM...", "timestamp": "2026-02-26T03:12:02.828288Z"}
+{"text": "", "actions": {"emotions": "neutral", "actions": "nod", "looks": "user"}, "event": "Orchestrator: LLM Reply", "timestamp": "2026-02-26T03:12:05.097251Z"}
+{"host_timestamp": 1772075525.0973895, "sender": "server_orchestrator", "target_device": "quest_vr_01", "target_agent": "agent_alpha", "command_type": "action", "command": "execute_state", "subcommand": {"emotions": "neutral", "actions": "nod", "looks": "user"}, "event": "interaction", "timestamp": "2026-02-26T03:12:05.097393Z"}
+{"topic": "framework.cmd", "message_len": 208, "event": "ZMQ Published message", "timestamp": "2026-02-26T03:12:05.099001Z"}
+{"total_connections": 0, "event": "WebSocket client disconnected", "timestamp": "2026-02-26T03:14:02.873758Z"}
+{"event": "Stopping ZMQ Transport...", "timestamp": "2026-02-26T03:14:02.979605Z"}
+{"event": "ZMQ Transport stopped.", "timestamp": "2026-02-26T03:14:02.980518Z"}
+{"event": "Stopping WebSocket Transport...", "timestamp": "2026-02-26T03:14:02.980568Z"}
+{"event": "WebSocket Transport stopped.", "timestamp": "2026-02-26T03:14:02.980585Z"}
+{"event": "OAF Server fully stopped.", "timestamp": "2026-02-26T03:14:02.980597Z"}

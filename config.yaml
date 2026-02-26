@@ -1,0 +1,53 @@
+# OpenVirtualAgentFramework (OAF) - Experiment Configuration
+# This file dynamically defines the properties available to the framework and the IA tools.
+
+experiment:
+  name: "Pilot Emotion Study"
+  description: "A pilot study to test agent reactions to basic commands."
+  version: "1.0.0"
+
+# Devices connected to the framework via ZMQ or WebSockets
+devices:
+  - id: "quest_vr_01"
+    name: "Player 1 VR Headset"
+    type: "xr" # xr, web, mobile
+  - id: "web_panel_01"
+    name: "Researcher Web Dashboard"
+    type: "web"
+
+# Available Agents in the scene that can receive commands
+agents:
+  - id: "agent_alpha"
+    name: "Alpha"
+    description: "Main conversational agent."
+  - id: "agent_beta"
+    name: "Beta"
+    description: "Support agent in the background."
+
+# Custom Properties & Commands
+# The server will automatically generate validation schemas for these types.
+custom_commands:
+  emotions:
+    description: "Agent emotional states"
+    values:
+      - "neutral"
+      - "happy"
+      - "sad"
+      - "angry"
+      - "surprised"
+      
+  actions:
+    description: "Discrete physical actions the agent can perform"
+    values:
+      - "wave"
+      - "point_left"
+      - "point_right"
+      - "nod"
+      - "shake_head"
+
+  looks:
+    description: "Targets the agent can look at"
+    values:
+      - "user"
+      - "away"
+      - "agent_beta"

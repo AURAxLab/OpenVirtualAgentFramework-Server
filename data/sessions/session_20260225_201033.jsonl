@@ -1,0 +1,34 @@
+{"session_id": "20260225_201033", "file": "data\\sessions\\session_20260225_201033.jsonl", "event": "Telemetry Session Started", "timestamp": "2026-02-26T02:10:33.377362Z"}
+{"transport_type": "ZMQTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T02:10:34.422910Z"}
+{"transport_type": "WebSocketTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T02:10:34.423010Z"}
+{"experiment": "Pilot Emotion Study", "event": "Starting OpenVirtualAgentFramework Server...", "timestamp": "2026-02-26T02:10:35.197211Z"}
+{"address": "tcp://*:5555", "event": "ZMQ Publisher bound", "timestamp": "2026-02-26T02:10:35.197623Z"}
+{"address": "tcp://*:5556", "event": "ZMQ Subscriber bound", "timestamp": "2026-02-26T02:10:35.199066Z"}
+{"event": "ZMQ Transport started.", "timestamp": "2026-02-26T02:10:35.199134Z"}
+{"event": "WebSocket Transport initialized (Awaiting FastAPI mount).", "timestamp": "2026-02-26T02:10:35.199154Z"}
+{"total_connections": 1, "event": "WebSocket client connected", "timestamp": "2026-02-26T02:10:35.395365Z"}
+{"new_provider": "gemini", "event": "Orchestrator: LLM Provider Swapped", "timestamp": "2026-02-26T02:10:36.660455Z"}
+{"event": "Orchestrator: System Prompt Updated", "timestamp": "2026-02-26T02:10:36.660514Z"}
+{"total_connections": 0, "event": "WebSocket client disconnected", "timestamp": "2026-02-26T02:10:41.868960Z"}
+{"total_connections": 1, "event": "WebSocket client connected", "timestamp": "2026-02-26T02:10:42.403138Z"}
+{"new_provider": "gemini", "event": "Orchestrator: LLM Provider Swapped", "timestamp": "2026-02-26T02:10:44.964516Z"}
+{"event": "Orchestrator: System Prompt Updated", "timestamp": "2026-02-26T02:10:44.964606Z"}
+{"sender": "woz_console", "type": "message", "event": "Received valid command", "timestamp": "2026-02-26T02:10:54.389884Z"}
+{"prompt": "Probando Gemini todo bien?", "event": "Orchestrator: Asking LLM...", "timestamp": "2026-02-26T02:10:54.390032Z"}
+{"error": "1 validation error for GenerateContentConfig\ntools\n  Input should be a valid list [type=list_type, input_value={'function_declarations':... 'actions', 'looks']}}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/list_type", "event": "Gemini API call failed", "timestamp": "2026-02-26T02:10:54.394085Z"}
+{"text": "API Error: 1 validation error for GenerateContentConfig\ntools\n  Input should be a valid list [type=list_type, input_value={'function_declarations':... 'actions', 'looks']}}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/list_type", "actions": {}, "event": "Orchestrator: LLM Reply", "timestamp": "2026-02-26T02:10:54.394215Z"}
+{"host_timestamp": 1772071854.394328, "sender": "server_orchestrator", "target_device": "all", "target_agent": "agent_alpha", "command_type": "message", "command": "llm_reply", "subcommand": {"text": "API Error: 1 validation error for GenerateContentConfig\ntools\n  Input should be a valid list [type=list_type, input_value={'function_declarations':... 'actions', 'looks']}}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/list_type"}, "event": "interaction", "timestamp": "2026-02-26T02:10:54.394334Z"}
+{"topic": "framework.cmd", "message_len": 429, "event": "ZMQ Published message", "timestamp": "2026-02-26T02:10:54.394683Z"}
+{"error": "'async for' requires an object with __aiter__ method, got generator", "event": "TTS Streaming failed", "timestamp": "2026-02-26T02:10:57.588716Z"}
+{"new_provider": "openai", "event": "Orchestrator: LLM Provider Swapped", "timestamp": "2026-02-26T02:11:15.943207Z"}
+{"event": "Orchestrator: System Prompt Updated", "timestamp": "2026-02-26T02:11:15.943291Z"}
+{"sender": "woz_console", "type": "message", "event": "Received valid command", "timestamp": "2026-02-26T02:11:22.542004Z"}
+{"prompt": "Probando ChatGPT, todo bien?", "event": "Orchestrator: Asking LLM...", "timestamp": "2026-02-26T02:11:22.542127Z"}
+{"text": "", "actions": {"emotions": "happy", "actions": "nod", "looks": "user"}, "event": "Orchestrator: LLM Reply", "timestamp": "2026-02-26T02:11:24.357130Z"}
+{"error": "1 validation error for BaseCommand\ntarget_device\n  Value error, Invalid target_device 'woz_console'. Must be one of ['quest_vr_01', 'web_panel_01', 'all'] [type=value_error, input_value='woz_console', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/value_error", "actions": {"emotions": "happy", "actions": "nod", "looks": "user"}, "event": "Failed to parse and route LLM actions", "timestamp": "2026-02-26T02:11:24.357270Z"}
+{"total_connections": 0, "event": "WebSocket client disconnected", "timestamp": "2026-02-26T02:11:28.998913Z"}
+{"event": "Stopping ZMQ Transport...", "timestamp": "2026-02-26T02:11:29.105262Z"}
+{"event": "ZMQ Transport stopped.", "timestamp": "2026-02-26T02:11:29.106267Z"}
+{"event": "Stopping WebSocket Transport...", "timestamp": "2026-02-26T02:11:29.106317Z"}
+{"event": "WebSocket Transport stopped.", "timestamp": "2026-02-26T02:11:29.106334Z"}
+{"event": "OAF Server fully stopped.", "timestamp": "2026-02-26T02:11:29.106346Z"}

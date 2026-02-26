@@ -1,0 +1,15 @@
+{"session_id": "20260225_194120", "file": "data\\sessions\\session_20260225_194120.jsonl", "event": "Telemetry Session Started", "timestamp": "2026-02-26T01:41:20.701140Z"}
+{"transport_type": "ZMQTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T01:41:21.872249Z"}
+{"transport_type": "WebSocketTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T01:41:21.872359Z"}
+{"event": "OPENAI_API_KEY environment variable not set. OpenAI won't authenticate.", "timestamp": "2026-02-26T01:41:21.872400Z"}
+{"event": "GEMINI_API_KEY environment variable not set. Gemini API will be unavailable.", "timestamp": "2026-02-26T01:41:22.073104Z"}
+{"experiment": "Pilot Emotion Study", "event": "Starting OpenVirtualAgentFramework Server...", "timestamp": "2026-02-26T01:41:22.075553Z"}
+{"address": "tcp://*:5555", "event": "ZMQ Publisher bound", "timestamp": "2026-02-26T01:41:22.075923Z"}
+{"address": "tcp://*:5556", "event": "ZMQ Subscriber bound", "timestamp": "2026-02-26T01:41:22.076241Z"}
+{"event": "ZMQ Transport started.", "timestamp": "2026-02-26T01:41:22.076283Z"}
+{"event": "WebSocket Transport initialized (Awaiting FastAPI mount).", "timestamp": "2026-02-26T01:41:22.076301Z"}
+{"event": "Stopping ZMQ Transport...", "timestamp": "2026-02-26T01:42:17.913533Z"}
+{"event": "ZMQ Transport stopped.", "timestamp": "2026-02-26T01:42:17.914443Z"}
+{"event": "Stopping WebSocket Transport...", "timestamp": "2026-02-26T01:42:17.914490Z"}
+{"event": "WebSocket Transport stopped.", "timestamp": "2026-02-26T01:42:17.914506Z"}
+{"event": "OAF Server fully stopped.", "timestamp": "2026-02-26T01:42:17.914517Z"}

@@ -1,0 +1,64 @@
+{"session_id": "20260225_194751", "file": "data\\sessions\\session_20260225_194751.jsonl", "event": "Telemetry Session Started", "timestamp": "2026-02-26T01:47:51.399889Z"}
+{"transport_type": "ZMQTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T01:47:52.499721Z"}
+{"transport_type": "WebSocketTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T01:47:52.499803Z"}
+{"event": "OPENAI_API_KEY environment variable not set. OpenAI won't authenticate.", "timestamp": "2026-02-26T01:47:52.499837Z"}
+{"event": "GEMINI_API_KEY environment variable not set. Gemini API will be unavailable.", "timestamp": "2026-02-26T01:47:52.685062Z"}
+{"experiment": "Pilot Emotion Study", "event": "Starting OpenVirtualAgentFramework Server...", "timestamp": "2026-02-26T01:47:52.688138Z"}
+{"address": "tcp://*:5555", "event": "ZMQ Publisher bound", "timestamp": "2026-02-26T01:47:52.688514Z"}
+{"address": "tcp://*:5556", "event": "ZMQ Subscriber bound", "timestamp": "2026-02-26T01:47:52.688637Z"}
+{"event": "ZMQ Transport started.", "timestamp": "2026-02-26T01:47:52.688664Z"}
+{"event": "WebSocket Transport initialized (Awaiting FastAPI mount).", "timestamp": "2026-02-26T01:47:52.688679Z"}
+{"sender": "quest_vr_01", "type": "scene_change", "event": "Received valid command", "timestamp": "2026-02-26T01:47:56.255527Z"}
+{"host_timestamp": 1772070476.2555842, "sender": "quest_vr_01", "target_device": "all", "target_agent": "agent_alpha", "command_type": "scene_change", "command": "position_update", "subcommand": {"x": 1.0, "y": 2.5, "z": -1.2}, "event": "interaction", "timestamp": "2026-02-26T01:47:56.255588Z"}
+{"topic": "framework.cmd", "message_len": 173, "event": "ZMQ Published message", "timestamp": "2026-02-26T01:47:56.255721Z"}
+{"sender": "quest_vr_01", "type": "scene_change", "event": "Received valid command", "timestamp": "2026-02-26T01:47:58.258801Z"}
+{"host_timestamp": 1772070478.2588854, "sender": "quest_vr_01", "target_device": "all", "target_agent": "agent_alpha", "command_type": "scene_change", "command": "position_update", "subcommand": {"x": 1.0, "y": 2.5, "z": -1.2}, "event": "interaction", "timestamp": "2026-02-26T01:47:58.258889Z"}
+{"topic": "framework.cmd", "message_len": 173, "event": "ZMQ Published message", "timestamp": "2026-02-26T01:47:58.259023Z"}
+{"sender": "quest_vr_01", "type": "scene_change", "event": "Received valid command", "timestamp": "2026-02-26T01:48:00.265956Z"}
+{"host_timestamp": 1772070480.266027, "sender": "quest_vr_01", "target_device": "all", "target_agent": "agent_alpha", "command_type": "scene_change", "command": "position_update", "subcommand": {"x": 1.0, "y": 2.5, "z": -1.2}, "event": "interaction", "timestamp": "2026-02-26T01:48:00.266033Z"}
+{"topic": "framework.cmd", "message_len": 173, "event": "ZMQ Published message", "timestamp": "2026-02-26T01:48:00.266178Z"}
+{"error": "2 validation errors for BaseCommand\ntarget_device\n  Value error, Invalid target_device 'wrong_device_id'. Must be one of ['quest_vr_01', 'web_panel_01', 'all'] [type=value_error, input_value='wrong_device_id', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/value_error\ncommand_type\n  Input should be 'audio', 'message', 'action', 'scene_change' or 'system' [type=literal_error, input_value='invalid_type', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/literal_error", "raw": "{\"sender\": \"quest_vr_01\", \"target_device\": \"wrong_device_id\", \"target_agent\": \"all\", \"command_type\": \"invalid_type\", \"command\": \"test\"}", "event": "Invalid command schema received", "timestamp": "2026-02-26T01:48:01.270149Z"}
+{"sender": "quest_vr_01", "type": "scene_change", "event": "Received valid command", "timestamp": "2026-02-26T01:48:02.276766Z"}
+{"host_timestamp": 1772070482.2768166, "sender": "quest_vr_01", "target_device": "all", "target_agent": "agent_alpha", "command_type": "scene_change", "command": "position_update", "subcommand": {"x": 1.0, "y": 2.5, "z": -1.2}, "event": "interaction", "timestamp": "2026-02-26T01:48:02.276820Z"}
+{"topic": "framework.cmd", "message_len": 173, "event": "ZMQ Published message", "timestamp": "2026-02-26T01:48:02.277036Z"}
+{"sender": "quest_vr_01", "type": "scene_change", "event": "Received valid command", "timestamp": "2026-02-26T01:48:04.290470Z"}
+{"host_timestamp": 1772070484.2905443, "sender": "quest_vr_01", "target_device": "all", "target_agent": "agent_alpha", "command_type": "scene_change", "command": "position_update", "subcommand": {"x": 1.0, "y": 2.5, "z": -1.2}, "event": "interaction", "timestamp": "2026-02-26T01:48:04.290549Z"}
+{"topic": "framework.cmd", "message_len": 173, "event": "ZMQ Published message", "timestamp": "2026-02-26T01:48:04.290703Z"}
+{"sender": "quest_vr_01", "type": "scene_change", "event": "Received valid command", "timestamp": "2026-02-26T01:48:06.301774Z"}
+{"host_timestamp": 1772070486.3018675, "sender": "quest_vr_01", "target_device": "all", "target_agent": "agent_alpha", "command_type": "scene_change", "command": "position_update", "subcommand": {"x": 1.0, "y": 2.5, "z": -1.2}, "event": "interaction", "timestamp": "2026-02-26T01:48:06.301872Z"}
+{"topic": "framework.cmd", "message_len": 173, "event": "ZMQ Published message", "timestamp": "2026-02-26T01:48:06.302021Z"}
+{"sender": "quest_vr_01", "type": "scene_change", "event": "Received valid command", "timestamp": "2026-02-26T01:48:08.310317Z"}
+{"host_timestamp": 1772070488.310378, "sender": "quest_vr_01", "target_device": "all", "target_agent": "agent_alpha", "command_type": "scene_change", "command": "position_update", "subcommand": {"x": 1.0, "y": 2.5, "z": -1.2}, "event": "interaction", "timestamp": "2026-02-26T01:48:08.310381Z"}
+{"topic": "framework.cmd", "message_len": 173, "event": "ZMQ Published message", "timestamp": "2026-02-26T01:48:08.310489Z"}
+{"sender": "quest_vr_01", "type": "scene_change", "event": "Received valid command", "timestamp": "2026-02-26T01:48:10.322301Z"}
+{"host_timestamp": 1772070490.3223739, "sender": "quest_vr_01", "target_device": "all", "target_agent": "agent_alpha", "command_type": "scene_change", "command": "position_update", "subcommand": {"x": 1.0, "y": 2.5, "z": -1.2}, "event": "interaction", "timestamp": "2026-02-26T01:48:10.322378Z"}
+{"topic": "framework.cmd", "message_len": 173, "event": "ZMQ Published message", "timestamp": "2026-02-26T01:48:10.322499Z"}
+{"sender": "quest_vr_01", "type": "scene_change", "event": "Received valid command", "timestamp": "2026-02-26T01:48:12.332896Z"}
+{"host_timestamp": 1772070492.3330002, "sender": "quest_vr_01", "target_device": "all", "target_agent": "agent_alpha", "command_type": "scene_change", "command": "position_update", "subcommand": {"x": 1.0, "y": 2.5, "z": -1.2}, "event": "interaction", "timestamp": "2026-02-26T01:48:12.333010Z"}
+{"topic": "framework.cmd", "message_len": 173, "event": "ZMQ Published message", "timestamp": "2026-02-26T01:48:12.333231Z"}
+{"sender": "quest_vr_01", "type": "scene_change", "event": "Received valid command", "timestamp": "2026-02-26T01:48:14.333840Z"}
+{"host_timestamp": 1772070494.3339298, "sender": "quest_vr_01", "target_device": "all", "target_agent": "agent_alpha", "command_type": "scene_change", "command": "position_update", "subcommand": {"x": 1.0, "y": 2.5, "z": -1.2}, "event": "interaction", "timestamp": "2026-02-26T01:48:14.333937Z"}
+{"topic": "framework.cmd", "message_len": 173, "event": "ZMQ Published message", "timestamp": "2026-02-26T01:48:14.334137Z"}
+{"sender": "quest_vr_01", "type": "scene_change", "event": "Received valid command", "timestamp": "2026-02-26T01:48:16.340088Z"}
+{"host_timestamp": 1772070496.340159, "sender": "quest_vr_01", "target_device": "all", "target_agent": "agent_alpha", "command_type": "scene_change", "command": "position_update", "subcommand": {"x": 1.0, "y": 2.5, "z": -1.2}, "event": "interaction", "timestamp": "2026-02-26T01:48:16.340164Z"}
+{"topic": "framework.cmd", "message_len": 173, "event": "ZMQ Published message", "timestamp": "2026-02-26T01:48:16.340413Z"}
+{"sender": "quest_vr_01", "type": "scene_change", "event": "Received valid command", "timestamp": "2026-02-26T01:48:18.346741Z"}
+{"host_timestamp": 1772070498.346881, "sender": "quest_vr_01", "target_device": "all", "target_agent": "agent_alpha", "command_type": "scene_change", "command": "position_update", "subcommand": {"x": 1.0, "y": 2.5, "z": -1.2}, "event": "interaction", "timestamp": "2026-02-26T01:48:18.346888Z"}
+{"topic": "framework.cmd", "message_len": 173, "event": "ZMQ Published message", "timestamp": "2026-02-26T01:48:18.347069Z"}
+{"sender": "quest_vr_01", "type": "scene_change", "event": "Received valid command", "timestamp": "2026-02-26T01:48:20.360324Z"}
+{"host_timestamp": 1772070500.360398, "sender": "quest_vr_01", "target_device": "all", "target_agent": "agent_alpha", "command_type": "scene_change", "command": "position_update", "subcommand": {"x": 1.0, "y": 2.5, "z": -1.2}, "event": "interaction", "timestamp": "2026-02-26T01:48:20.360403Z"}
+{"topic": "framework.cmd", "message_len": 173, "event": "ZMQ Published message", "timestamp": "2026-02-26T01:48:20.360574Z"}
+{"sender": "quest_vr_01", "type": "scene_change", "event": "Received valid command", "timestamp": "2026-02-26T01:48:22.363576Z"}
+{"host_timestamp": 1772070502.363674, "sender": "quest_vr_01", "target_device": "all", "target_agent": "agent_alpha", "command_type": "scene_change", "command": "position_update", "subcommand": {"x": 1.0, "y": 2.5, "z": -1.2}, "event": "interaction", "timestamp": "2026-02-26T01:48:22.363680Z"}
+{"topic": "framework.cmd", "message_len": 173, "event": "ZMQ Published message", "timestamp": "2026-02-26T01:48:22.363818Z"}
+{"sender": "quest_vr_01", "type": "scene_change", "event": "Received valid command", "timestamp": "2026-02-26T01:48:24.376656Z"}
+{"host_timestamp": 1772070504.3767107, "sender": "quest_vr_01", "target_device": "all", "target_agent": "agent_alpha", "command_type": "scene_change", "command": "position_update", "subcommand": {"x": 1.0, "y": 2.5, "z": -1.2}, "event": "interaction", "timestamp": "2026-02-26T01:48:24.376714Z"}
+{"topic": "framework.cmd", "message_len": 173, "event": "ZMQ Published message", "timestamp": "2026-02-26T01:48:24.376817Z"}
+{"sender": "quest_vr_01", "type": "scene_change", "event": "Received valid command", "timestamp": "2026-02-26T01:48:26.392259Z"}
+{"host_timestamp": 1772070506.3923228, "sender": "quest_vr_01", "target_device": "all", "target_agent": "agent_alpha", "command_type": "scene_change", "command": "position_update", "subcommand": {"x": 1.0, "y": 2.5, "z": -1.2}, "event": "interaction", "timestamp": "2026-02-26T01:48:26.392327Z"}
+{"topic": "framework.cmd", "message_len": 173, "event": "ZMQ Published message", "timestamp": "2026-02-26T01:48:26.392503Z"}
+{"event": "Stopping ZMQ Transport...", "timestamp": "2026-02-26T01:49:41.366074Z"}
+{"event": "ZMQ Transport stopped.", "timestamp": "2026-02-26T01:49:41.367565Z"}
+{"event": "Stopping WebSocket Transport...", "timestamp": "2026-02-26T01:49:41.367641Z"}
+{"event": "WebSocket Transport stopped.", "timestamp": "2026-02-26T01:49:41.367659Z"}
+{"event": "OAF Server fully stopped.", "timestamp": "2026-02-26T01:49:41.367671Z"}

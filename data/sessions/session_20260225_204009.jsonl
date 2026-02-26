@@ -1,0 +1,31 @@
+{"session_id": "20260225_204009", "file": "data\\sessions\\session_20260225_204009.jsonl", "event": "Telemetry Session Started", "timestamp": "2026-02-26T02:40:09.325837Z"}
+{"transport_type": "ZMQTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T02:40:10.412489Z"}
+{"transport_type": "WebSocketTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T02:40:10.412577Z"}
+{"experiment": "Pilot Emotion Study", "event": "Starting OpenVirtualAgentFramework Server...", "timestamp": "2026-02-26T02:40:11.140369Z"}
+{"address": "tcp://*:5555", "event": "ZMQ Publisher bound", "timestamp": "2026-02-26T02:40:11.140864Z"}
+{"address": "tcp://*:5556", "event": "ZMQ Subscriber bound", "timestamp": "2026-02-26T02:40:11.141403Z"}
+{"event": "ZMQ Transport started.", "timestamp": "2026-02-26T02:40:11.141451Z"}
+{"event": "WebSocket Transport initialized (Awaiting FastAPI mount).", "timestamp": "2026-02-26T02:40:11.141468Z"}
+{"total_connections": 1, "event": "WebSocket client connected", "timestamp": "2026-02-26T02:40:15.632446Z"}
+{"total_connections": 0, "event": "WebSocket client disconnected", "timestamp": "2026-02-26T02:40:17.124416Z"}
+{"total_connections": 1, "event": "WebSocket client connected", "timestamp": "2026-02-26T02:40:17.874000Z"}
+{"new_provider": "gemini", "event": "Orchestrator: LLM Provider Swapped", "timestamp": "2026-02-26T02:40:24.712812Z"}
+{"event": "Orchestrator: System Prompt Updated", "timestamp": "2026-02-26T02:40:24.712872Z"}
+{"prompt": "Saludos Gemineico", "event": "Orchestrator: Asking LLM...", "timestamp": "2026-02-26T02:40:36.940015Z"}
+{"text": "", "actions": {"emotions": "neutral", "looks": "user", "actions": "nod"}, "event": "Orchestrator: LLM Reply", "timestamp": "2026-02-26T02:40:39.265912Z"}
+{"error": "1 validation error for BaseCommand\ntarget_device\n  Value error, Invalid target_device 'woz_console'. Must be one of ['quest_vr_01', 'web_panel_01', 'all'] [type=value_error, input_value='woz_console', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/value_error", "actions": {"emotions": "neutral", "looks": "user", "actions": "nod"}, "event": "Failed to parse and route LLM actions", "timestamp": "2026-02-26T02:40:39.266280Z"}
+{"total_connections": 0, "event": "WebSocket client disconnected", "timestamp": "2026-02-26T03:04:51.923371Z"}
+{"total_connections": 1, "event": "WebSocket client connected", "timestamp": "2026-02-26T03:10:59.660734Z"}
+{"total_connections": 0, "event": "WebSocket client disconnected", "timestamp": "2026-02-26T03:11:20.096111Z"}
+{"total_connections": 1, "event": "WebSocket client connected", "timestamp": "2026-02-26T03:11:20.766498Z"}
+{"prompt": "Hola Gemini!", "event": "Orchestrator: Asking LLM...", "timestamp": "2026-02-26T03:11:32.695064Z"}
+{"text": "", "actions": {"emotions": "happy", "actions": "nod", "looks": "user"}, "event": "Orchestrator: LLM Reply", "timestamp": "2026-02-26T03:11:34.332513Z"}
+{"error": "1 validation error for BaseCommand\ntarget_device\n  Value error, Invalid target_device 'woz_console'. Must be one of ['quest_vr_01', 'web_panel_01', 'all'] [type=value_error, input_value='woz_console', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/value_error", "actions": {"emotions": "happy", "actions": "nod", "looks": "user"}, "event": "Failed to parse and route LLM actions", "timestamp": "2026-02-26T03:11:34.332708Z"}
+{"total_connections": 0, "event": "WebSocket client disconnected", "timestamp": "2026-02-26T03:11:41.970203Z"}
+{"total_connections": 1, "event": "WebSocket client connected", "timestamp": "2026-02-26T03:11:42.570658Z"}
+{"total_connections": 0, "event": "WebSocket client disconnected", "timestamp": "2026-02-26T03:11:44.659460Z"}
+{"event": "Stopping ZMQ Transport...", "timestamp": "2026-02-26T03:11:44.767140Z"}
+{"event": "ZMQ Transport stopped.", "timestamp": "2026-02-26T03:11:44.768438Z"}
+{"event": "Stopping WebSocket Transport...", "timestamp": "2026-02-26T03:11:44.768540Z"}
+{"event": "WebSocket Transport stopped.", "timestamp": "2026-02-26T03:11:44.768599Z"}
+{"event": "OAF Server fully stopped.", "timestamp": "2026-02-26T03:11:44.768666Z"}

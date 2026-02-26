@@ -1,0 +1,26 @@
+{"session_id": "20260225_200447", "file": "data\\sessions\\session_20260225_200447.jsonl", "event": "Telemetry Session Started", "timestamp": "2026-02-26T02:04:47.510165Z"}
+{"transport_type": "ZMQTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T02:04:48.513943Z"}
+{"transport_type": "WebSocketTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T02:04:48.514022Z"}
+{"event": "OPENAI_API_KEY environment variable not set. OpenAI won't authenticate.", "timestamp": "2026-02-26T02:04:48.514056Z"}
+{"event": "GEMINI_API_KEY environment variable not set. Gemini API will be unavailable.", "timestamp": "2026-02-26T02:04:48.694924Z"}
+{"experiment": "Pilot Emotion Study", "event": "Starting OpenVirtualAgentFramework Server...", "timestamp": "2026-02-26T02:04:48.698303Z"}
+{"address": "tcp://*:5555", "event": "ZMQ Publisher bound", "timestamp": "2026-02-26T02:04:48.698703Z"}
+{"address": "tcp://*:5556", "event": "ZMQ Subscriber bound", "timestamp": "2026-02-26T02:04:48.698999Z"}
+{"event": "ZMQ Transport started.", "timestamp": "2026-02-26T02:04:48.699047Z"}
+{"event": "WebSocket Transport initialized (Awaiting FastAPI mount).", "timestamp": "2026-02-26T02:04:48.699067Z"}
+{"total_connections": 1, "event": "WebSocket client connected", "timestamp": "2026-02-26T02:04:55.405506Z"}
+{"new_provider": "gemini", "event": "Orchestrator: LLM Provider Swapped", "timestamp": "2026-02-26T02:05:06.027514Z"}
+{"event": "Orchestrator: System Prompt Updated", "timestamp": "2026-02-26T02:05:06.027600Z"}
+{"sender": "woz_console", "type": "message", "event": "Received valid command", "timestamp": "2026-02-26T02:05:14.632679Z"}
+{"prompt": "Hola Gemini, \u00bfcomo andas?", "event": "Orchestrator: Asking LLM...", "timestamp": "2026-02-26T02:05:14.632805Z"}
+{"event": "Gemini Provider called but the client is not initialized (missing API key).", "timestamp": "2026-02-26T02:05:14.632846Z"}
+{"text": "Server Error: Gemini Provider is unconfigured.", "actions": {}, "event": "Orchestrator: LLM Reply", "timestamp": "2026-02-26T02:05:14.632876Z"}
+{"host_timestamp": 1772071514.6329198, "sender": "server_orchestrator", "target_device": "all", "target_agent": "agent_alpha", "command_type": "message", "command": "llm_reply", "subcommand": {"text": "Server Error: Gemini Provider is unconfigured."}, "event": "interaction", "timestamp": "2026-02-26T02:05:14.632924Z"}
+{"topic": "framework.cmd", "message_len": 201, "event": "ZMQ Published message", "timestamp": "2026-02-26T02:05:14.633102Z"}
+{"error": "Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-dummy. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}", "event": "TTS Streaming failed", "timestamp": "2026-02-26T02:05:15.467435Z"}
+{"total_connections": 0, "event": "WebSocket client disconnected", "timestamp": "2026-02-26T02:08:02.274197Z"}
+{"event": "Stopping ZMQ Transport...", "timestamp": "2026-02-26T02:08:02.379430Z"}
+{"event": "ZMQ Transport stopped.", "timestamp": "2026-02-26T02:08:02.380400Z"}
+{"event": "Stopping WebSocket Transport...", "timestamp": "2026-02-26T02:08:02.380453Z"}
+{"event": "WebSocket Transport stopped.", "timestamp": "2026-02-26T02:08:02.380469Z"}
+{"event": "OAF Server fully stopped.", "timestamp": "2026-02-26T02:08:02.380481Z"}

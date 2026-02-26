@@ -1,0 +1,6 @@
+{"session_id": "20260225_193403", "file": "data\\sessions\\session_20260225_193403.jsonl", "event": "Telemetry Session Started", "timestamp": "2026-02-26T01:34:03.141958Z"}
+{"transport_type": "ZMQTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T01:34:04.334978Z"}
+{"transport_type": "WebSocketTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T01:34:04.335092Z"}
+{"event": "OPENAI_API_KEY environment variable not set. OpenAI won't authenticate.", "timestamp": "2026-02-26T01:34:04.335144Z"}
+{"event": "GEMINI_API_KEY environment variable not set. Gemini API will be unavailable.", "timestamp": "2026-02-26T01:34:04.532197Z"}
+{"experiment": "Pilot Emotion Study", "event": "Starting OpenVirtualAgentFramework Server...", "timestamp": "2026-02-26T01:34:04.536349Z"}

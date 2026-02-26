@@ -1,0 +1,110 @@
+import base64
+import asyncio
+import logging
+from pydantic import ValidationError
+from structlog import get_logger
+
+from src.core.schemas import BaseCommand
+from src.core.config import config_manager
+from src.core.telemetry import telemetry
+from src.transport.base import BaseTransport
+
+logger = get_logger()
+std_log = logging.getLogger("oaf.router")
+
+class CommandRouter:
+    """
+    Core bus that receives messages from any Transport Layer (ZMQ or WebSockets),
+    validates them against the Experiment Configuration (via BaseCommand), 
+    and routes them to the appropriate destinations or AI Providers.
+    """
+    def __init__(self):
+        self._transports: list[BaseTransport] = []
+        self._orchestrator = None
+        
+    def set_orchestrator(self, orchestrator):
+        self._orchestrator = orchestrator
+        
+    def add_transport(self, transport: BaseTransport):
+        """Register a transport layer and bind the router's incoming handler."""
+        self._transports.append(transport)
+        transport.register_callback(self.handle_incoming_raw)
+        logger.info("Transport registered to Router", transport_type=type(transport).__name__)
+        
+    async def handle_incoming_raw(self, raw_message: str):
+        """
+        Entrypoint for all raw string messages arriving from ZMQ or WS.
+        Validates against the dynamic Pydantic schema first.
+        """
+        try:
+            command = BaseCommand.from_json(raw_message)
+            std_log.info(f"✅ Router: Valid command received | type={command.command_type} cmd={command.command} sender={command.sender}")
+            await self.route_command(command)
+            
+        except ValidationError as e:
+            std_log.error(f"❌ Router: Invalid command schema | error={str(e)[:200]}")
+            logger.error("Invalid command schema received", error=str(e), raw=raw_message)
+        except Exception as e:
+            std_log.error(f"❌ Router: Unexpected error processing message | error={str(e)}")
+            logger.error("Error processing incoming message", error=str(e), raw=raw_message)
+            
+    async def route_command(self, command: BaseCommand):
+        """
+        Determines where the command should go based on target_device and command_type.
+        """
+        # If the command is an audio blob sent from a client, intercept it and route to the AI Orchestrator
+        if command.command_type == "audio" and command.command == "stt_request":
+            if self._orchestrator and command.subcommand and "audio_base64" in command.subcommand:
+                try:
+                    audio_bytes = base64.b64decode(command.subcommand["audio_base64"])
+                    # Fire-and-forget the processing so the router doesn't block incoming ZMQ traffic
+                    asyncio.create_task(
+                        self._orchestrator.process_audio_interaction(
+                            audio_bytes=audio_bytes, 
+                            target_device=command.sender, # Reply goes back to the sender
+                            target_agent=command.target_agent
+                        )
+                    )
+                except Exception as e:
+                    logger.error("Failed to decode and route audio to orchestrator", error=str(e))
+            return # Do not broadcast pure STT audio back to everyone
+            
+        # If it's a direct text message intended for the AI
+        if command.command_type == "message" and command.command == "llm_request":
+             if self._orchestrator and command.subcommand and "text" in command.subcommand:
+                 # Use 'all' as target so replies reach all connected clients including the WoZ console
+                 reply_target = command.target_device if command.target_device != "all" else command.sender
+                 # If sender isn't a registered device (e.g. woz_console), default to 'all'
+                 valid_devices = [d.id for d in config_manager.config.devices] + ["all"]
+                 if reply_target not in valid_devices:
+                     reply_target = "all"
+                 std_log.info(f"🧠 Router: Dispatching to Orchestrator | text=\"{command.subcommand['text'][:100]}\" | reply_target={reply_target}")
+                 asyncio.create_task(
+                     self._orchestrator.process_text_interaction(
+                         text=command.subcommand["text"],
+                         target_device=reply_target,
+                         target_agent=command.target_agent
+                     )
+                 )
+             else:
+                 std_log.warning(f"⚠️ Router: llm_request received but no orchestrator or missing text")
+             return
+             
+        # Otherwise (normal WoZ commands, TTS chunks returning, agent actions), broadcast them to all transports
+        await self.broadcast(command)
+
+    async def broadcast(self, command: BaseCommand):
+        """Funnels a validated command down to all active transport layers."""
+        telemetry.log_interaction(command)
+        std_log.info(f"📡 Router: Broadcasting | type={command.command_type} cmd={command.command} to {len(self._transports)} transports")
+        
+        json_payload = command.to_json()
+        
+        # Use a generic 'framework.cmd' topic for ZMQ or WS envelopes
+        topic = "framework.cmd" 
+        
+        tasks = [transport.publish(topic, json_payload) for transport in self._transports]
+        if tasks:
+            await asyncio.gather(*tasks)
+
+router = CommandRouter()
