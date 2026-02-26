@@ -351,17 +351,22 @@
         });
 
         // Connect SysLogs WS
+        let sysLogsReconnecting = false;
         function connectSysLogsWS() {
+            if (sysLogsReconnecting) return;
+            sysLogsReconnecting = true;
             const wsUrl = `ws://${window.location.host}/ws/logs`;
             const logsWs = new WebSocket(wsUrl);
+            logsWs.onopen = () => { sysLogsReconnecting = false; };
             logsWs.onmessage = (event) => {
                 try {
                     const data = JSON.parse(event.data);
                     sysLog(data.level, data.name, data.message);
                 } catch (e) { }
             };
-            logsWs.onclose = () => { setTimeout(connectSysLogsWS, 5000); };
-            logsWs.onerror = () => { setTimeout(connectSysLogsWS, 5000); };
+            // Only reconnect on close (onerror always fires before onclose, so this avoids double-reconnect)
+            logsWs.onclose = () => { sysLogsReconnecting = false; setTimeout(connectSysLogsWS, 5000); };
+            logsWs.onerror = () => { /* onclose will handle reconnection */ };
         }
 
         // Connect to WebSocket
@@ -376,14 +381,73 @@
                 log('WebSocket connected to OAF Router.', 'info');
             };
 
-            ws.onmessage = (event) => {
-                log(`RECV: ${event.data}`, 'recv');
+            // --- TTS Audio Playback ---
+            let ttsAudioChunks = [];  // Collect base64 chunks
+            let ttsAudioPlayer = document.getElementById('tts-audio-player');
+            if (!ttsAudioPlayer) {
+                ttsAudioPlayer = document.createElement('audio');
+                ttsAudioPlayer.id = 'tts-audio-player';
+                document.body.appendChild(ttsAudioPlayer);
+            }
 
-                // Parse for Chat Bubbles
+            ws.onmessage = (event) => {
+                // Parse for Chat Bubbles & Audio
                 try {
                     const raw = JSON.parse(event.data);
                     // The WS transport wraps messages in {"topic": "...", "payload": {...}}
                     const data = raw.payload || raw;
+
+                    // --- TTS Audio Handling (don't log these, they're huge base64 strings) ---
+                    if (data.command_type === "audio" && data.sender === "server_orchestrator") {
+                        if (data.command === "tts_chunk" && data.subcommand && data.subcommand.audio_base64) {
+                            // Decode base64 chunk and store as Uint8Array
+                            const binaryStr = atob(data.subcommand.audio_base64);
+                            const bytes = new Uint8Array(binaryStr.length);
+                            for (let i = 0; i < binaryStr.length; i++) {
+                                bytes[i] = binaryStr.charCodeAt(i);
+                            }
+                            ttsAudioChunks.push(bytes);
+                            return; // Don't log audio chunks
+                        }
+                        if (data.command === "tts_complete") {
+                            // Combine all chunks into a WAV blob
+                            if (ttsAudioChunks.length > 0) {
+                                const blob = new Blob(ttsAudioChunks, { type: 'audio/wav' });
+                                const url = URL.createObjectURL(blob);
+                                ttsAudioChunks = [];
+
+                                // Try autoplay
+                                if (ttsAudioPlayer.src) URL.revokeObjectURL(ttsAudioPlayer.src);
+                                ttsAudioPlayer.src = url;
+                                ttsAudioPlayer.play().catch(() => { });
+
+                                // Attach a 🔊 replay button to the last agent bubble
+                                const cw = document.getElementById('chat-window');
+                                const agentBubbles = cw.getElementsByClassName('msg-agent');
+                                if (agentBubbles.length > 0) {
+                                    const lastBubble = agentBubbles[agentBubbles.length - 1];
+                                    const speakerBtn = document.createElement('button');
+                                    speakerBtn.className = 'btn btn-sm btn-outline-info mt-1';
+                                    speakerBtn.style.cssText = 'font-size:0.75em; padding:2px 8px; border-radius:12px;';
+                                    speakerBtn.textContent = '🔊 Play';
+                                    speakerBtn.onclick = () => {
+                                        const audio = new Audio(url);
+                                        speakerBtn.textContent = '🔊 ▶ Playing...';
+                                        audio.play().catch(e => log(`Audio error: ${e.message}`, 'error'));
+                                        audio.onended = () => { speakerBtn.textContent = '🔊 Play'; };
+                                    };
+                                    lastBubble.appendChild(speakerBtn);
+                                }
+
+                                log(`🔊 TTS audio ready (${blob.size} bytes)`, 'info');
+                            }
+                            return;
+                        }
+                    }
+
+                    // Log non-audio messages normally
+                    log(`RECV: ${event.data}`, 'recv');
+
                     const cw = document.getElementById('chat-window');
 
                     if (data.command_type === "message" && data.command === "llm_reply") {
@@ -420,7 +484,8 @@
                         }
                     }
                 } catch (e) {
-                    // Not valid JSON or irrelevant
+                    // Not valid JSON or irrelevant — still log it
+                    log(`RECV: ${event.data}`, 'recv');
                 }
             };
 

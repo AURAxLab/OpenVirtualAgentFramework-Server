@@ -1,0 +1,9 @@
+{"session_id": "20260226_113641", "file": "data\\sessions\\session_20260226_113641.jsonl", "event": "Telemetry Session Started", "timestamp": "2026-02-26T17:36:41.779962Z"}
+{"transport_type": "ZMQTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T17:36:43.028057Z"}
+{"transport_type": "WebSocketTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T17:36:43.028218Z"}
+{"experiment": "Pilot Emotion Study", "event": "Starting OpenVirtualAgentFramework Server...", "timestamp": "2026-02-26T17:36:43.861373Z"}
+{"address": "tcp://*:5555", "event": "ZMQ Publisher bound", "timestamp": "2026-02-26T17:36:43.861864Z"}
+{"address": "tcp://*:5556", "event": "ZMQ Subscriber bound", "timestamp": "2026-02-26T17:36:43.865979Z"}
+{"event": "ZMQ Transport started.", "timestamp": "2026-02-26T17:36:43.866064Z"}
+{"event": "WebSocket Transport initialized (Awaiting FastAPI mount).", "timestamp": "2026-02-26T17:36:43.866086Z"}
+{"total_connections": 1, "event": "WebSocket client connected", "timestamp": "2026-02-26T17:36:44.403415Z"}

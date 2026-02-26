@@ -2,12 +2,14 @@ import os
 import json
 from typing import AsyncGenerator, Dict, Any, Optional
 from openai import AsyncOpenAI
+import logging
 from structlog import get_logger
 
 from src.providers.base import BaseSTTProvider, BaseLLMProvider, BaseTTSProvider
 from src.core.config import config_manager
 
 logger = get_logger()
+std_log = logging.getLogger("oaf.openai")
 
 class OpenAIClientSingleton:
     """Manages the shared AsyncOpenAI client instance."""
@@ -37,14 +39,17 @@ class OpenAISTTProvider(BaseSTTProvider):
         # Note: OpenAI expects a named file or a tuple (filename, file_content)
         # Ideally, we receive WAV or similar encoded binary audio from the XR client
         try:
+            std_log.info(f"🎤 STT: Starting transcription | audio_size={len(audio_data)} bytes")
             file_tuple = ("audio.wav", audio_data, "audio/wav")
             transcription = await self.client.audio.transcriptions.create(
                 model=self.model,
                 file=file_tuple,
                 response_format="text"
             )
+            std_log.info(f"✅ STT: Transcription complete | text=\"{str(transcription)[:80]}\"")
             return transcription
         except Exception as e:
+            std_log.error(f"❌ STT: Transcription failed | {type(e).__name__}: {str(e)}")
             logger.error("STT transcription failed", error=str(e))
             return ""
 
@@ -153,13 +158,25 @@ class OpenAITTSProvider(BaseTTSProvider):
         self.client = OpenAIClientSingleton.get_client()
 
     async def synthesize_stream(self, text: str) -> AsyncGenerator[bytes, None]:
-        audio_stream = await self.client.audio.speech.create(
+        std_log.info(f"🔊 TTS: Starting synthesis | model={self.model} voice={self.voice} text=\"{text[:60]}\"")
+        audio_response = await self.client.audio.speech.create(
             model=self.model,
             voice=self.voice,
             input=text,
-            response_format="wav" # WAV allows easier playback in Unity
+            response_format="wav"  # WAV allows easier playback in Unity and browsers
         )
         
-        # Stream the exact binary chunks yielding them to ZMQ immediately
-        async for chunk in audio_stream.iter_bytes(1024):
-            yield chunk
+        # Read the full audio response (.content is sync-safe on the already-resolved response)
+        # Note: iter_bytes() returns a SYNC iterator on AsyncOpenAI responses,
+        # so 'async for' silently yields nothing. We read .content instead.
+        audio_bytes = audio_response.content
+        total_size = len(audio_bytes)
+        std_log.info(f"✅ TTS: Audio received | size={total_size} bytes ({total_size//1024}KB)")
+        
+        # Yield in chunks for streaming over ZMQ/WS
+        chunk_size = 32 * 1024  # 32KB chunks
+        chunk_count = 0
+        for i in range(0, total_size, chunk_size):
+            chunk_count += 1
+            yield audio_bytes[i:i + chunk_size]
+        std_log.info(f"📤 TTS: Yielded {chunk_count} chunks to transport")

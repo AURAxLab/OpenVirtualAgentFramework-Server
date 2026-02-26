@@ -163,11 +163,14 @@ class DialogOrchestrator:
     async def _dispatch_tts(self, text: str, target_device: str, target_agent: str):
         """Starts TTS generation and streams audio chunks through the router as they arrive."""
         try:
+            std_log.info(f"🔊 Orchestrator: Starting TTS synthesis | target={target_device} text=\"{text[:60]}\"")
             audio_generator = self.tts.synthesize_stream(text)
             
+            chunk_count = 0
             async for audio_chunk in audio_generator:
                 # We encode the raw bytes into base64 to transport inside the JSON command via ZMQ
                 b64_chunk = base64.b64encode(audio_chunk).decode("utf-8")
+                chunk_count += 1
                 
                 cmd = BaseCommand(
                     sender="server_orchestrator",
@@ -178,8 +181,10 @@ class DialogOrchestrator:
                     subcommand={"audio_base64": b64_chunk}
                 )
                 await router.route_command(cmd)
+            
+            std_log.info(f"📤 Orchestrator: TTS chunks sent | count={chunk_count}")
                 
-            # Optional: Send a final 'tts_complete' flag 
+            # Send a final 'tts_complete' flag 
             end_cmd = BaseCommand(
                 sender="server_orchestrator",
                 target_device=target_device,
@@ -188,6 +193,8 @@ class DialogOrchestrator:
                 command="tts_complete"
             )
             await router.route_command(end_cmd)
+            std_log.info(f"✅ Orchestrator: TTS complete signal sent")
             
         except Exception as e:
+            std_log.error(f"❌ Orchestrator: TTS Streaming failed | {type(e).__name__}: {str(e)}")
             logger.error("TTS Streaming failed", error=str(e))
