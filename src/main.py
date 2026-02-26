@@ -1,3 +1,16 @@
+"""
+Open Virtual Agent Framework (OAF) — Application Entry Point
+
+FastAPI application that bootstraps the entire OAF server:
+initializes transports (ZMQ + WebSocket), registers AI providers
+(OpenAI, Gemini), configures the dialog orchestrator, and exposes
+REST/WebSocket endpoints for the Wizard-of-Oz console, LLM chat,
+telemetry export, and real-time system logs.
+
+Author: Alexander Barquero Elizondo, Ph.D. — UCR, ECCI/CITIC
+License: MIT
+"""
+
 import asyncio
 import os
 import json
@@ -22,7 +35,7 @@ from src.core.telemetry import telemetry
 
 # Using OpenAI as the default fully functional provider for the MVP
 from src.providers.openai_provider import OpenAISTTProvider, OpenAILLMProvider, OpenAITTSProvider
-from src.providers.gemini_provider import GeminiLLMProvider
+from src.providers.gemini_provider import GeminiLLMProvider, GeminiTTSProvider
 from pydantic import BaseModel
 
 logger = get_logger()
@@ -46,11 +59,15 @@ llm_providers = {
     "gemini": GeminiLLMProvider()
 }
 tts_provider = OpenAITTSProvider()
+gemini_tts_provider = GeminiTTSProvider()
 
 orchestrator = DialogOrchestrator(
     stt_provider=stt_provider,
     llm_providers=llm_providers,
-    tts_provider=tts_provider,
+    tts_providers={
+        "openai": tts_provider,
+        "gemini": gemini_tts_provider
+    },
     default_llm="openai"
 )
 
@@ -212,6 +229,9 @@ logging.getLogger("uvicorn.error").addHandler(ws_logger)
 logging.getLogger("uvicorn.error").addHandler(file_handler)
 logging.getLogger("fastapi").addHandler(ws_logger)
 logging.getLogger("fastapi").addHandler(file_handler)
+logging.getLogger("oaf.openai").addHandler(ws_logger)
+logging.getLogger("oaf.openai").addHandler(file_handler)
+logging.getLogger("oaf.openai").setLevel(logging.DEBUG)
 
 # --------------------------
 

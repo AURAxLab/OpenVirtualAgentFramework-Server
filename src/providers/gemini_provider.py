@@ -1,11 +1,26 @@
+"""
+Open Virtual Agent Framework (OAF) — Google Gemini Provider
+
+Implements LLM and TTS providers using the Google ``genai`` SDK:
+- ``GeminiLLMProvider``: Gemini chat completions with function calling for
+  agent actions (emotions, gestures, gaze). Uses a shared singleton client.
+- ``GeminiTTSProvider``: Text-to-speech synthesis using ``gemini-2.5-flash-tts``
+  with configurable voice presets via the ``generate_content`` API.
+
+Author: Alexander Barquero Elizondo, Ph.D. — UCR, ECCI/CITIC
+License: MIT
+"""
+
 import os
 import asyncio
+import base64
 import logging
 from typing import AsyncGenerator, Dict, Any, Optional
 from google import genai
+from google.genai import types as genai_types
 from structlog import get_logger
 
-from src.providers.base import BaseLLMProvider
+from src.providers.base import BaseLLMProvider, BaseTTSProvider
 from src.core.config import config_manager
 
 logger = get_logger()
@@ -171,3 +186,60 @@ class GeminiLLMProvider(BaseLLMProvider):
                     
         std_log.info(f"✅ Gemini: Response complete | text=\"{spoken_text[:80]}\" | actions={actions}")
         return spoken_text, actions
+
+
+class GeminiTTSProvider(BaseTTSProvider):
+    """Gemini TTS provider using the genai SDK with generate_content + AUDIO modality."""
+    
+    def __init__(self, model_name: str = "gemini-2.5-flash-tts", voice: str = "Kore"):
+        self.model = model_name
+        self.voice = voice
+        self.client = GeminiClientSingleton.get_client()
+    
+    async def synthesize_stream(self, text: str) -> AsyncGenerator[bytes, None]:
+        if not self.client:
+            std_log.error("❌ Gemini TTS: Client not initialized (missing API key)")
+            return
+        
+        std_log.info(f"🔊 Gemini TTS: Starting synthesis | model={self.model} voice={self.voice} text=\"{text[:60]}\"")
+        
+        try:
+            response = await asyncio.to_thread(
+                self.client.models.generate_content,
+                model=self.model,
+                contents=text,
+                config=genai_types.GenerateContentConfig(
+                    response_modalities=["AUDIO"],
+                    speech_config=genai_types.SpeechConfig(
+                        voice_config=genai_types.VoiceConfig(
+                            prebuilt_voice_config=genai_types.PrebuiltVoiceConfig(
+                                voice_name=self.voice
+                            )
+                        )
+                    )
+                )
+            )
+        except Exception as e:
+            std_log.error(f"❌ Gemini TTS: API call failed | {type(e).__name__}: {str(e)}")
+            return
+        
+        # Extract audio data from response
+        try:
+            audio_data = response.candidates[0].content.parts[0].inline_data
+            audio_bytes = audio_data.data  # Raw audio bytes
+            mime_type = audio_data.mime_type  # e.g. "audio/wav" or "audio/L16"
+            
+            total_size = len(audio_bytes)
+            std_log.info(f"✅ Gemini TTS: Audio received | size={total_size} bytes ({total_size//1024}KB) mime={mime_type}")
+            
+            # Yield in chunks for streaming over ZMQ/WS
+            chunk_size = 32 * 1024  # 32KB chunks
+            chunk_count = 0
+            for i in range(0, total_size, chunk_size):
+                chunk_count += 1
+                yield audio_bytes[i:i + chunk_size]
+            
+            std_log.info(f"📤 Gemini TTS: Yielded {chunk_count} chunks to transport")
+        except (IndexError, AttributeError) as e:
+            std_log.error(f"❌ Gemini TTS: Failed to parse audio response | {type(e).__name__}: {str(e)}")
+

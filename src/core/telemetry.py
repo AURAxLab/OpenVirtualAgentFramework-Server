@@ -1,3 +1,15 @@
+"""
+Open Virtual Agent Framework (OAF) — Telemetry Logger
+
+Handles structured logging of all interactions for experimental
+reproducibility. Events are recorded in JSONL format with high-precision
+timestamps and can be exported to CSV for analysis in SPSS, R, or
+similar statistical software.
+
+Author: Alexander Barquero Elizondo, Ph.D. — UCR, ECCI/CITIC
+License: MIT
+"""
+
 import os
 import json
 import csv

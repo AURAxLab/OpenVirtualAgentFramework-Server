@@ -1,3 +1,15 @@
+"""
+Open Virtual Agent Framework (OAF) — Dialog Orchestrator
+
+Central AI pipeline manager that coordinates the full interaction cycle:
+STT (speech-to-text) → LLM (language model) → TTS (text-to-speech).
+Maintains conversation history, dispatches actions to connected XR
+clients, and manages provider hot-swapping at runtime.
+
+Author: Alexander Barquero Elizondo, Ph.D. — UCR, ECCI/CITIC
+License: MIT
+"""
+
 import asyncio
 import base64
 import logging
@@ -24,13 +36,13 @@ class DialogOrchestrator:
     def __init__(self, 
                  stt_provider: BaseSTTProvider,
                  llm_providers: dict[str, BaseLLMProvider], 
-                 tts_provider: BaseTTSProvider,
+                 tts_providers: dict[str, BaseTTSProvider],
                  default_llm: str = "openai"):
                      
         self.stt = stt_provider
         self.llm_providers = llm_providers
         self.active_llm_id = default_llm
-        self.tts = tts_provider
+        self.tts_providers = tts_providers
         self.tts_enabled = True  # Toggle from UI
         self.conversation_history: list[dict[str, str]] = []
         
@@ -55,6 +67,14 @@ class DialogOrchestrator:
         if not provider:
             logger.error(f"Active LLM Provider '{self.active_llm_id}' not found. Falling back to first available.")
             return next(iter(self.llm_providers.values()))
+        return provider
+
+    @property
+    def tts(self) -> BaseTTSProvider:
+        """Returns the TTS provider matching the active LLM provider, or first available."""
+        provider = self.tts_providers.get(self.active_llm_id)
+        if not provider:
+            provider = next(iter(self.tts_providers.values()))
         return provider
 
     def set_active_llm(self, provider_id: str):

@@ -1,3 +1,15 @@
+"""
+Open Virtual Agent Framework (OAF) — ZeroMQ Transport
+
+Low-latency bidirectional transport for XR clients (Unity, Unreal).
+Uses ZMQ PUB/SUB sockets: a PUB socket broadcasts commands from the
+server to clients, and a SUB socket receives telemetry and audio
+from XR clients back to the server.
+
+Author: Alexander Barquero Elizondo, Ph.D. — UCR, ECCI/CITIC
+License: MIT
+"""
+
 import asyncio
 import zmq
 import zmq.asyncio

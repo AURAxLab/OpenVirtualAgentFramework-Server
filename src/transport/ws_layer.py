@@ -1,3 +1,15 @@
+"""
+Open Virtual Agent Framework (OAF) — WebSocket Transport
+
+Bidirectional transport layer for web-based clients using FastAPI's
+WebSocket support. Manages connection lifecycle, broadcasts outbound
+messages to all connected clients, and dispatches inbound messages
+to registered framework callbacks.
+
+Author: Alexander Barquero Elizondo, Ph.D. — UCR, ECCI/CITIC
+License: MIT
+"""
+
 import asyncio
 from fastapi import WebSocket, WebSocketDisconnect
 from structlog import get_logger

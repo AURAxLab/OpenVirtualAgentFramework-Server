@@ -1,3 +1,14 @@
+"""
+Open Virtual Agent Framework (OAF) — Configuration Manager
+
+Loads and validates the experiment configuration from ``config.yaml``.
+Defines Pydantic models for devices, agents, and custom command categories,
+and exposes a singleton ``ConfigManager`` for global access.
+
+Author: Alexander Barquero Elizondo, Ph.D. — UCR, ECCI/CITIC
+License: MIT
+"""
+
 import yaml
 from pathlib import Path
 from pydantic import BaseModel, Field

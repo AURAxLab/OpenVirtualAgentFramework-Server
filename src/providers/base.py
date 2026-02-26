@@ -1,3 +1,15 @@
+"""
+Open Virtual Agent Framework (OAF) — Provider Base Classes
+
+Defines abstract base classes for the three AI provider roles:
+``BaseSTTProvider`` (speech-to-text), ``BaseLLMProvider`` (language model),
+and ``BaseTTSProvider`` (text-to-speech). All concrete providers must
+implement their respective interfaces.
+
+Author: Alexander Barquero Elizondo, Ph.D. — UCR, ECCI/CITIC
+License: MIT
+"""
+
 from abc import ABC, abstractmethod
 from typing import AsyncGenerator, Dict, Any, Optional
 

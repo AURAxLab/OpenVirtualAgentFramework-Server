@@ -1,3 +1,15 @@
+"""
+Open Virtual Agent Framework (OAF) — Mock XR Client
+
+Development utility that simulates a Unity/Unreal XR client connecting
+to the OAF server via ZeroMQ. Sends periodic telemetry messages and
+listens for server commands. Useful for testing the ZMQ transport
+pipeline without a real XR headset.
+
+Author: Alexander Barquero Elizondo, Ph.D. — UCR, ECCI/CITIC
+License: MIT
+"""
+
 import asyncio
 import zmq
 import zmq.asyncio

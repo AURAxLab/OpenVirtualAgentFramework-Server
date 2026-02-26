@@ -1,3 +1,15 @@
+"""
+Open Virtual Agent Framework (OAF) — Command Schemas
+
+Defines the ``BaseCommand`` Pydantic model that is the universal message
+structure flowing through ZMQ and WebSocket transports. Commands are
+validated dynamically against the current experiment configuration loaded
+from ``config.yaml``.
+
+Author: Alexander Barquero Elizondo, Ph.D. — UCR, ECCI/CITIC
+License: MIT
+"""
+
 from pydantic import BaseModel, Field, field_validator
 from typing import Any, Dict, Optional, Literal
 import json

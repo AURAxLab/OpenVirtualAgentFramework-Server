@@ -1,3 +1,16 @@
+"""
+Open Virtual Agent Framework (OAF) — OpenAI Provider
+
+Implements STT, LLM, and TTS providers using the OpenAI API:
+- ``OpenAISTTProvider``: Whisper-based speech-to-text transcription.
+- ``OpenAILLMProvider``: GPT chat completions with tool/function calling
+  for agent actions (emotions, gestures, gaze).
+- ``OpenAITTSProvider``: Text-to-speech synthesis using the ``tts-1`` model.
+
+Author: Alexander Barquero Elizondo, Ph.D. — UCR, ECCI/CITIC
+License: MIT
+"""
+
 import os
 import json
 from typing import AsyncGenerator, Dict, Any, Optional

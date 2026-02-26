@@ -7,6 +7,16 @@
     <title>OAF: Wizard of Oz Console</title>
     <!-- Use a simple modern CSS framework for MVP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Three.js + VRM Import Map for ES Modules -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+            "@pixiv/three-vrm": "https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@3/lib/three-vrm.module.min.js"
+        }
+    }
+    </script>
     <style>
         body {
             background-color: #121212;
@@ -101,6 +111,26 @@
             align-self: flex-start;
             border-bottom-left-radius: 2px;
             border: 1px solid #444;
+        }
+
+        /* Avatar Styles */
+        .avatar-card {
+            position: relative;
+            background: #1a1a2e;
+        }
+
+        .avatar-card canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .avatar-status {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 10;
         }
 
         .action-tag {
@@ -210,7 +240,7 @@
             <div class="tab-pane fade" id="llm-panel" role="tabpanel" aria-labelledby="llm-tab">
                 <div class="row">
                     <!-- LLM Configuration -->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card">
                             <div class="card-header">Brain Configuration</div>
                             <div class="card-body">
@@ -220,22 +250,22 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label text-warning">System Prompt (Personality)</label>
-                                    <textarea id="system-prompt" class="form-control text-warning" rows="12"
-                                        style="font-family: monospace; font-size: 0.9em;"></textarea>
+                                    <textarea id="system-prompt" class="form-control text-warning" rows="10"
+                                        style="font-family: monospace; font-size: 0.85em;"></textarea>
                                 </div>
                                 <button id="save-llm-btn" class="btn btn-success w-100">Apply Changes to Server</button>
                                 <div class="d-flex gap-2 mt-2">
                                     <button id="tts-toggle-btn" class="btn btn-outline-warning flex-fill">🔊 TTS
                                         ON</button>
-                                    <button id="clear-history-btn" class="btn btn-outline-danger flex-fill">🗑️ Clear
-                                        History</button>
+                                    <button id="clear-history-btn" class="btn btn-outline-danger flex-fill">🗑️ Reset
+                                        Agent</button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- LLM Chat Interface -->
-                    <div class="col-md-8">
+                    <div class="col-md-5">
                         <div class="card">
                             <div class="card-header">Simulated Conversation</div>
                             <div class="card-body p-0">
@@ -252,6 +282,30 @@
                                         <button class="btn btn-primary" id="chat-send-btn">Send (Trigger LLM)</button>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3D Avatar Panel -->
+                    <div class="col-md-4">
+                        <div class="card avatar-card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span>🧑 Embodied Agent</span>
+                                <span id="avatar-status" class="badge bg-secondary avatar-status">Loading...</span>
+                            </div>
+                            <div class="p-2 border-bottom border-secondary" style="background: #1e1e30;">
+                                <div class="d-flex gap-2 align-items-center">
+                                    <select id="avatar-select" class="form-select form-select-sm" style="flex:1">
+                                        <option value="/models/default_avatar.vrm">👩 Female (Default)</option>
+                                    </select>
+                                    <label class="btn btn-sm btn-outline-info" style="white-space:nowrap;">
+                                        📂 Upload
+                                        <input type="file" id="avatar-upload" accept=".vrm" style="display:none">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="card-body p-0" style="height: 400px; position: relative;">
+                                <canvas id="avatar-canvas"></canvas>
                             </div>
                         </div>
                     </div>
@@ -421,6 +475,11 @@
                                 ttsAudioPlayer.src = url;
                                 ttsAudioPlayer.play().catch(() => { });
 
+                                // Connect to avatar lip sync
+                                if (window._avatarController) {
+                                    window._avatarController.connectAudio(ttsAudioPlayer);
+                                }
+
                                 // Attach a 🔊 replay button to the last agent bubble
                                 const cw = document.getElementById('chat-window');
                                 const agentBubbles = cw.getElementsByClassName('msg-agent');
@@ -480,6 +539,11 @@
                                 tag.className = "action-tag";
                                 tag.textContent = `⚡ [${key}: ${value}]`;
                                 tagsCtr.appendChild(tag);
+
+                                // Send emotions to avatar
+                                if (key === 'emotions' && window._avatarController) {
+                                    window._avatarController.setEmotion(value);
+                                }
                             }
                         }
                     }
@@ -641,11 +705,19 @@
             this.disabled = true;
             try {
                 await fetch('/api/llm/history/clear', { method: 'POST' });
-                this.textContent = '✅ Cleared!';
-                log('Conversation history cleared', 'info');
-                setTimeout(() => { this.textContent = '🗑️ Clear History'; this.disabled = false; }, 1500);
+                // Clear chat window
+                document.getElementById('chat-window').innerHTML = '<div class="text-center text-muted mt-5"><small>Agent reset. Say something to start a new conversation.</small></div>';
+                // Clear localStorage
+                localStorage.removeItem('oaf_chat_html');
+                localStorage.removeItem('oaf_avatar');
+                localStorage.removeItem('oaf_llm_provider');
+                localStorage.removeItem('oaf_system_prompt');
+                localStorage.removeItem('oaf_tts_enabled');
+                this.textContent = '✅ Agent Reset!';
+                log('Agent fully reset: history, chat, and saved state cleared', 'info');
+                setTimeout(() => { this.textContent = '🗑️ Reset Agent'; this.disabled = false; }, 1500);
             } catch (e) {
-                log(`Failed to clear history: ${e}`, 'error');
+                log(`Failed to reset agent: ${e}`, 'error');
                 this.disabled = false;
             }
         };
@@ -692,12 +764,126 @@
             if (e.key === 'Enter') sendChatMsg();
         });
 
+        // --- localStorage Persistence ---
+        const STORAGE_KEYS = {
+            chat: 'oaf_chat_html',
+            avatar: 'oaf_avatar',
+            llm: 'oaf_llm_provider',
+            prompt: 'oaf_system_prompt',
+            tts: 'oaf_tts_enabled'
+        };
+
+        function saveState() {
+            try {
+                localStorage.setItem(STORAGE_KEYS.chat, document.getElementById('chat-window').innerHTML);
+                localStorage.setItem(STORAGE_KEYS.llm, document.getElementById('llm-provider-select').value);
+                localStorage.setItem(STORAGE_KEYS.prompt, document.getElementById('system-prompt').value);
+                const ttsBtn = document.getElementById('tts-toggle-btn');
+                localStorage.setItem(STORAGE_KEYS.tts, ttsBtn.textContent.includes('ON') ? 'true' : 'false');
+            } catch (e) {
+                console.warn('[Persistence] Save failed:', e);
+            }
+        }
+
+        function restoreState() {
+            try {
+                const chatHtml = localStorage.getItem(STORAGE_KEYS.chat);
+                if (chatHtml) document.getElementById('chat-window').innerHTML = chatHtml;
+
+                const savedPrompt = localStorage.getItem(STORAGE_KEYS.prompt);
+                if (savedPrompt) document.getElementById('system-prompt').value = savedPrompt;
+            } catch (e) {
+                console.warn('[Persistence] Restore failed:', e);
+            }
+        }
+
+        // Auto-save on chat changes (observer)
+        const chatObserver = new MutationObserver(() => saveState());
+        chatObserver.observe(document.getElementById('chat-window'), { childList: true, subtree: true });
+
         // Boot
         window.onload = () => {
+            restoreState();
             initConfig();
             connectWS();
             connectSysLogsWS();
+
+            // Restore LLM provider after config loads
+            setTimeout(() => {
+                const savedLlm = localStorage.getItem(STORAGE_KEYS.llm);
+                if (savedLlm) {
+                    const sel = document.getElementById('llm-provider-select');
+                    if (sel) { sel.value = savedLlm; }
+                }
+            }, 500);
         };
+    </script>
+
+    <!-- Avatar Module (ES Module — requires import map above) -->
+    <script type="module">
+        import AvatarController from './avatar.js';
+
+        // Expose to global scope for WebSocket handlers
+        window._avatarController = AvatarController;
+
+        function loadAvatar(url) {
+            const statusBadge = document.getElementById('avatar-status');
+            statusBadge.style.display = '';
+            statusBadge.textContent = 'Loading...';
+            statusBadge.className = 'badge bg-warning avatar-status';
+
+            AvatarController.loadModel(url)
+                .then(() => {
+                    statusBadge.textContent = 'Ready';
+                    statusBadge.className = 'badge bg-success avatar-status';
+                    setTimeout(() => { statusBadge.style.display = 'none'; }, 3000);
+                    localStorage.setItem('oaf_avatar', url);
+                })
+                .catch((err) => {
+                    statusBadge.textContent = 'Error';
+                    statusBadge.className = 'badge bg-danger avatar-status';
+                    console.error('[Avatar] Load failed:', err);
+                });
+        }
+
+        // Initialize scene
+        const canvas = document.getElementById('avatar-canvas');
+        if (canvas) {
+            AvatarController.init(canvas);
+
+            // Load saved avatar or default
+            const savedAvatar = localStorage.getItem('oaf_avatar');
+            const avatarUrl = savedAvatar || '/models/default_avatar.vrm';
+            loadAvatar(avatarUrl);
+
+            // If saved URL matches a select option, set it
+            const avatarSelect = document.getElementById('avatar-select');
+            if (avatarSelect) {
+                for (const opt of avatarSelect.options) {
+                    if (opt.value === avatarUrl) { avatarSelect.value = avatarUrl; break; }
+                }
+            }
+        }
+
+        // Avatar selector dropdown
+        document.getElementById('avatar-select')?.addEventListener('change', (e) => {
+            if (e.target.value) loadAvatar(e.target.value);
+        });
+
+        // Upload custom VRM
+        document.getElementById('avatar-upload')?.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const url = URL.createObjectURL(file);
+            // Add to dropdown
+            const select = document.getElementById('avatar-select');
+            const opt = document.createElement('option');
+            opt.value = url;
+            opt.textContent = `📁 ${file.name}`;
+            select.appendChild(opt);
+            select.value = url;
+            loadAvatar(url);
+        });
     </script>
 </body>
 

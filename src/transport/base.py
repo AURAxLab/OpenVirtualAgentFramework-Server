@@ -1,3 +1,15 @@
+"""
+Open Virtual Agent Framework (OAF) — Transport Base Class
+
+Defines ``BaseTransport``, the abstract base class for all communication
+layers. Transports handle bidirectional message flow between the server
+and connected clients (XR headsets, web browsers, mobile apps).
+Supports callback registration for inbound message dispatching.
+
+Author: Alexander Barquero Elizondo, Ph.D. — UCR, ECCI/CITIC
+License: MIT
+"""
+
 import asyncio
 from abc import ABC, abstractmethod
 from typing import Callable, Awaitable, Any
