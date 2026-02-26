@@ -14,6 +14,8 @@ License: MIT
 import os
 import asyncio
 import base64
+import json
+import struct
 import logging
 from typing import AsyncGenerator, Dict, Any, Optional
 from google import genai
@@ -188,10 +190,27 @@ class GeminiLLMProvider(BaseLLMProvider):
         return spoken_text, actions
 
 
+def _create_wav_header(sample_rate: int, num_channels: int, sample_width: int, data_size: int) -> bytes:
+    """Generates a standard 44-byte WAV header for raw PCM data."""
+    header = b'RIFF'
+    header += struct.pack('<I', 36 + data_size)
+    header += b'WAVE'
+    header += b'fmt '
+    header += struct.pack('<I', 16) # Subchunk1Size
+    header += struct.pack('<H', 1)  # AudioFormat (1=PCM)
+    header += struct.pack('<H', num_channels)
+    header += struct.pack('<I', sample_rate)
+    header += struct.pack('<I', sample_rate * num_channels * sample_width) # ByteRate
+    header += struct.pack('<H', num_channels * sample_width) # BlockAlign
+    header += struct.pack('<H', sample_width * 8) # BitsPerSample
+    header += b'data'
+    header += struct.pack('<I', data_size)
+    return header
+
 class GeminiTTSProvider(BaseTTSProvider):
     """Gemini TTS provider using the genai SDK with generate_content + AUDIO modality."""
     
-    def __init__(self, model_name: str = "gemini-2.5-flash-tts", voice: str = "Kore"):
+    def __init__(self, model_name: str = "gemini-2.5-flash-preview-tts", voice: str = "Kore"):
         self.model = model_name
         self.voice = voice
         self.client = GeminiClientSingleton.get_client()
@@ -204,10 +223,14 @@ class GeminiTTSProvider(BaseTTSProvider):
         std_log.info(f"🔊 Gemini TTS: Starting synthesis | model={self.model} voice={self.voice} text=\"{text[:60]}\"")
         
         try:
+            # The preview TTS model can sometimes fail if the prompt isn't clearly
+            # framed as a text-to-speech request. We wrap it slightly.
+            tts_prompt = f"Repeat exactly this text as audio: {text}"
+            
             response = await asyncio.to_thread(
                 self.client.models.generate_content,
                 model=self.model,
-                contents=text,
+                contents=tts_prompt,
                 config=genai_types.GenerateContentConfig(
                     response_modalities=["AUDIO"],
                     speech_config=genai_types.SpeechConfig(
@@ -227,10 +250,16 @@ class GeminiTTSProvider(BaseTTSProvider):
         try:
             audio_data = response.candidates[0].content.parts[0].inline_data
             audio_bytes = audio_data.data  # Raw audio bytes
-            mime_type = audio_data.mime_type  # e.g. "audio/wav" or "audio/L16"
+            mime_type = audio_data.mime_type  # e.g. "audio/wav" or "audio/L16;codec=pcm;rate=24000"
             
             total_size = len(audio_bytes)
             std_log.info(f"✅ Gemini TTS: Audio received | size={total_size} bytes ({total_size//1024}KB) mime={mime_type}")
+            
+            # If it's pure L16 PCM without a RIFF header, we MUST prepend one so browsers can play it
+            if mime_type.startswith("audio/L16") and not audio_bytes.startswith(b'RIFF'):
+                # Default for Gemini L16 is 24kHz, mono, 16-bit
+                wav_header = _create_wav_header(sample_rate=24000, num_channels=1, sample_width=2, data_size=total_size)
+                yield wav_header
             
             # Yield in chunks for streaming over ZMQ/WS
             chunk_size = 32 * 1024  # 32KB chunks
