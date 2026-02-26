@@ -1,0 +1,62 @@
+{"session_id": "20260226_113117", "file": "data\\sessions\\session_20260226_113117.jsonl", "event": "Telemetry Session Started", "timestamp": "2026-02-26T17:31:17.884394Z"}
+{"transport_type": "ZMQTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T17:31:19.124973Z"}
+{"transport_type": "WebSocketTransport", "event": "Transport registered to Router", "timestamp": "2026-02-26T17:31:19.125069Z"}
+{"experiment": "Pilot Emotion Study", "event": "Starting OpenVirtualAgentFramework Server...", "timestamp": "2026-02-26T17:31:19.952206Z"}
+{"address": "tcp://*:5555", "event": "ZMQ Publisher bound", "timestamp": "2026-02-26T17:31:19.952707Z"}
+{"address": "tcp://*:5556", "event": "ZMQ Subscriber bound", "timestamp": "2026-02-26T17:31:19.953964Z"}
+{"event": "ZMQ Transport started.", "timestamp": "2026-02-26T17:31:19.954015Z"}
+{"event": "WebSocket Transport initialized (Awaiting FastAPI mount).", "timestamp": "2026-02-26T17:31:19.954036Z"}
+{"total_connections": 1, "event": "WebSocket client connected", "timestamp": "2026-02-26T17:31:22.113438Z"}
+{"total_connections": 0, "event": "WebSocket client disconnected", "timestamp": "2026-02-26T17:31:24.774978Z"}
+{"total_connections": 1, "event": "WebSocket client connected", "timestamp": "2026-02-26T17:31:25.346699Z"}
+{"host_timestamp": 1772127087.123561, "sender": "woz_console", "target_device": "quest_vr_01", "target_agent": "agent_alpha", "command_type": "action", "command": "execute_state", "subcommand": {"emotions": "neutral"}, "event": "interaction", "timestamp": "2026-02-26T17:31:27.123586Z"}
+{"topic": "framework.cmd", "message_len": 169, "event": "ZMQ Published message", "timestamp": "2026-02-26T17:31:27.124029Z"}
+{"host_timestamp": 1772127087.992859, "sender": "woz_console", "target_device": "quest_vr_01", "target_agent": "agent_alpha", "command_type": "action", "command": "execute_state", "subcommand": {"emotions": "happy"}, "event": "interaction", "timestamp": "2026-02-26T17:31:27.992871Z"}
+{"topic": "framework.cmd", "message_len": 167, "event": "ZMQ Published message", "timestamp": "2026-02-26T17:31:27.993299Z"}
+{"host_timestamp": 1772127088.7049973, "sender": "woz_console", "target_device": "quest_vr_01", "target_agent": "agent_alpha", "command_type": "action", "command": "execute_state", "subcommand": {"emotions": "sad"}, "event": "interaction", "timestamp": "2026-02-26T17:31:28.705012Z"}
+{"topic": "framework.cmd", "message_len": 165, "event": "ZMQ Published message", "timestamp": "2026-02-26T17:31:28.705514Z"}
+{"host_timestamp": 1772127089.2908945, "sender": "woz_console", "target_device": "quest_vr_01", "target_agent": "agent_alpha", "command_type": "action", "command": "execute_state", "subcommand": {"emotions": "angry"}, "event": "interaction", "timestamp": "2026-02-26T17:31:29.290908Z"}
+{"topic": "framework.cmd", "message_len": 167, "event": "ZMQ Published message", "timestamp": "2026-02-26T17:31:29.291287Z"}
+{"host_timestamp": 1772127089.757985, "sender": "woz_console", "target_device": "quest_vr_01", "target_agent": "agent_alpha", "command_type": "action", "command": "execute_state", "subcommand": {"emotions": "surprised"}, "event": "interaction", "timestamp": "2026-02-26T17:31:29.757997Z"}
+{"topic": "framework.cmd", "message_len": 171, "event": "ZMQ Published message", "timestamp": "2026-02-26T17:31:29.758386Z"}
+{"host_timestamp": 1772127090.7311244, "sender": "woz_console", "target_device": "quest_vr_01", "target_agent": "agent_alpha", "command_type": "action", "command": "execute_state", "subcommand": {"actions": "point_right"}, "event": "interaction", "timestamp": "2026-02-26T17:31:30.731137Z"}
+{"topic": "framework.cmd", "message_len": 172, "event": "ZMQ Published message", "timestamp": "2026-02-26T17:31:30.732764Z"}
+{"host_timestamp": 1772127096.2207959, "sender": "woz_console", "target_device": "all", "target_agent": "all", "command_type": "action", "command": "execute_state", "subcommand": {"emotions": "happy"}, "event": "interaction", "timestamp": "2026-02-26T17:31:36.220809Z"}
+{"topic": "framework.cmd", "message_len": 151, "event": "ZMQ Published message", "timestamp": "2026-02-26T17:31:36.221180Z"}
+{"host_timestamp": 1772127102.4326348, "sender": "woz_console", "target_device": "quest_vr_01", "target_agent": "all", "command_type": "action", "command": "execute_state", "subcommand": {"emotions": "happy"}, "event": "interaction", "timestamp": "2026-02-26T17:31:42.432650Z"}
+{"topic": "framework.cmd", "message_len": 159, "event": "ZMQ Published message", "timestamp": "2026-02-26T17:31:42.433156Z"}
+{"host_timestamp": 1772127106.9197764, "sender": "woz_console", "target_device": "all", "target_agent": "all", "command_type": "action", "command": "execute_state", "subcommand": {"looks": "agent_beta"}, "event": "interaction", "timestamp": "2026-02-26T17:31:46.919790Z"}
+{"topic": "framework.cmd", "message_len": 153, "event": "ZMQ Published message", "timestamp": "2026-02-26T17:31:46.920239Z"}
+{"host_timestamp": 1772127107.7283704, "sender": "woz_console", "target_device": "all", "target_agent": "all", "command_type": "action", "command": "execute_state", "subcommand": {"actions": "shake_head"}, "event": "interaction", "timestamp": "2026-02-26T17:31:47.728382Z"}
+{"topic": "framework.cmd", "message_len": 155, "event": "ZMQ Published message", "timestamp": "2026-02-26T17:31:47.728747Z"}
+{"prompt": "Hi, how are you?", "event": "Orchestrator: Asking LLM...", "timestamp": "2026-02-26T17:31:58.190342Z"}
+{"text": "Hi there! I'm doing great, thanks for asking. How about you?", "actions": {"emotions": "happy", "actions": "wave", "looks": "user"}, "event": "Orchestrator: LLM Reply", "timestamp": "2026-02-26T17:32:00.775845Z"}
+{"host_timestamp": 1772127120.7760315, "sender": "server_orchestrator", "target_device": "all", "target_agent": "all", "command_type": "message", "command": "llm_reply", "subcommand": {"text": "Hi there! I'm doing great, thanks for asking. How about you?", "provider": "openai", "model": "gpt-4o", "agent": "all"}, "event": "interaction", "timestamp": "2026-02-26T17:32:00.776037Z"}
+{"topic": "framework.cmd", "message_len": 258, "event": "ZMQ Published message", "timestamp": "2026-02-26T17:32:00.776576Z"}
+{"host_timestamp": 1772127120.7770455, "sender": "server_orchestrator", "target_device": "all", "target_agent": "all", "command_type": "action", "command": "execute_state", "subcommand": {"emotions": "happy", "actions": "wave", "looks": "user"}, "event": "interaction", "timestamp": "2026-02-26T17:32:00.777052Z"}
+{"topic": "framework.cmd", "message_len": 191, "event": "ZMQ Published message", "timestamp": "2026-02-26T17:32:00.777395Z"}
+{"error": "'async for' requires an object with __aiter__ method, got generator", "event": "TTS Streaming failed", "timestamp": "2026-02-26T17:32:02.682381Z"}
+{"new_provider": "gemini", "event": "Orchestrator: LLM Provider Swapped", "timestamp": "2026-02-26T17:32:08.225885Z"}
+{"event": "Orchestrator: System Prompt Updated", "timestamp": "2026-02-26T17:32:08.225969Z"}
+{"prompt": "This is a test. Do you remember my name?", "event": "Orchestrator: Asking LLM...", "timestamp": "2026-02-26T17:32:16.752328Z"}
+{"text": "As an AI, I don't have a memory of your name from past conversations. What would you like me to call you?", "actions": {"actions": "nod", "looks": "user", "emotions": "neutral"}, "event": "Orchestrator: LLM Reply", "timestamp": "2026-02-26T17:32:18.356302Z"}
+{"host_timestamp": 1772127138.3564565, "sender": "server_orchestrator", "target_device": "all", "target_agent": "all", "command_type": "message", "command": "llm_reply", "subcommand": {"text": "As an AI, I don't have a memory of your name from past conversations. What would you like me to call you?", "provider": "gemini", "model": "gemini-2.5-flash", "agent": "all"}, "event": "interaction", "timestamp": "2026-02-26T17:32:18.356461Z"}
+{"topic": "framework.cmd", "message_len": 313, "event": "ZMQ Published message", "timestamp": "2026-02-26T17:32:18.356932Z"}
+{"host_timestamp": 1772127138.3572931, "sender": "server_orchestrator", "target_device": "all", "target_agent": "all", "command_type": "action", "command": "execute_state", "subcommand": {"actions": "nod", "looks": "user", "emotions": "neutral"}, "event": "interaction", "timestamp": "2026-02-26T17:32:18.357297Z"}
+{"topic": "framework.cmd", "message_len": 192, "event": "ZMQ Published message", "timestamp": "2026-02-26T17:32:18.357619Z"}
+{"error": "'async for' requires an object with __aiter__ method, got generator", "event": "TTS Streaming failed", "timestamp": "2026-02-26T17:32:22.947040Z"}
+{"new_provider": "openai", "event": "Orchestrator: LLM Provider Swapped", "timestamp": "2026-02-26T17:32:33.522616Z"}
+{"event": "Orchestrator: System Prompt Updated", "timestamp": "2026-02-26T17:32:33.522708Z"}
+{"prompt": "I can't hear you.", "event": "Orchestrator: Asking LLM...", "timestamp": "2026-02-26T17:32:40.719705Z"}
+{"text": "I'm sorry about that. Let's make sure your audio settings are correct or try refreshing the connection.", "actions": {"emotions": "neutral", "actions": "shake_head", "looks": "user"}, "event": "Orchestrator: LLM Reply", "timestamp": "2026-02-26T17:32:42.790483Z"}
+{"host_timestamp": 1772127162.7906659, "sender": "server_orchestrator", "target_device": "all", "target_agent": "all", "command_type": "message", "command": "llm_reply", "subcommand": {"text": "I'm sorry about that. Let's make sure your audio settings are correct or try refreshing the connection.", "provider": "openai", "model": "gpt-4o", "agent": "all"}, "event": "interaction", "timestamp": "2026-02-26T17:32:42.790671Z"}
+{"topic": "framework.cmd", "message_len": 301, "event": "ZMQ Published message", "timestamp": "2026-02-26T17:32:42.791199Z"}
+{"host_timestamp": 1772127162.7916574, "sender": "server_orchestrator", "target_device": "all", "target_agent": "all", "command_type": "action", "command": "execute_state", "subcommand": {"emotions": "neutral", "actions": "shake_head", "looks": "user"}, "event": "interaction", "timestamp": "2026-02-26T17:32:42.791663Z"}
+{"topic": "framework.cmd", "message_len": 199, "event": "ZMQ Published message", "timestamp": "2026-02-26T17:32:42.792000Z"}
+{"error": "'async for' requires an object with __aiter__ method, got generator", "event": "TTS Streaming failed", "timestamp": "2026-02-26T17:32:46.496060Z"}
+{"total_connections": 0, "event": "WebSocket client disconnected", "timestamp": "2026-02-26T17:33:00.319704Z"}
+{"event": "Stopping ZMQ Transport...", "timestamp": "2026-02-26T17:33:00.429104Z"}
+{"event": "ZMQ Transport stopped.", "timestamp": "2026-02-26T17:33:00.430059Z"}
+{"event": "Stopping WebSocket Transport...", "timestamp": "2026-02-26T17:33:00.430114Z"}
+{"event": "WebSocket Transport stopped.", "timestamp": "2026-02-26T17:33:00.430134Z"}
+{"event": "OAF Server fully stopped.", "timestamp": "2026-02-26T17:33:00.430147Z"}

@@ -298,6 +298,13 @@
         let ws = null;
         const logWindow = document.getElementById('log-window');
 
+        // Helper to escape HTML entities (prevent XSS)
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
         function log(message, type = "info") {
             const div = document.createElement('div');
             div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
@@ -387,7 +394,7 @@
 
                         const bubble = document.createElement('div');
                         bubble.className = "chat-bubble msg-agent";
-                        bubble.innerHTML = `<strong>Agent (${agentLabel}):</strong><br>${sub.text}<br><small class="text-muted" style="font-size:0.7em;">🧠 ${providerLabel} · ${modelLabel}</small>`;
+                        bubble.innerHTML = `<strong>Agent (${escapeHtml(agentLabel)}):</strong><br>${escapeHtml(sub.text)}<br><small class="text-muted" style="font-size:0.7em;">🧠 ${escapeHtml(providerLabel)} · ${escapeHtml(modelLabel)}</small>`;
                         // Create a container to hold potential action tags for this message
                         const tagsContainer = document.createElement('div');
                         tagsContainer.className = "action-tags-container mt-1";
@@ -471,8 +478,10 @@
 
                 // Create a row for each command category
                 for (const [catName, catData] of Object.entries(config.custom_commands || {})) {
-                    container.innerHTML += `<h6 class="mt-3 text-info border-bottom border-secondary pb-1">${catName.toUpperCase()} 
-                    <small class="text-muted fw-normal">- ${catData.description}</small></h6>`;
+                    const heading = document.createElement('h6');
+                    heading.className = 'mt-3 text-info border-bottom border-secondary pb-1';
+                    heading.innerHTML = `${catName.toUpperCase()} <small class="text-muted fw-normal">- ${catData.description}</small>`;
+                    container.appendChild(heading);
 
                     const btnGroup = document.createElement('div');
 
@@ -485,6 +494,13 @@
                             const subcmd = {};
                             subcmd[catName] = val;
                             sendCommand('action', 'execute_state', subcmd);
+                            // Visual feedback: flash green
+                            btn.className = 'btn btn-success btn-action btn-sm';
+                            btn.textContent = `✅ ${val}`;
+                            setTimeout(() => {
+                                btn.className = 'btn btn-outline-light btn-action btn-sm';
+                                btn.textContent = val;
+                            }, 800);
                         };
                         btnGroup.appendChild(btn);
                     });
@@ -596,7 +612,7 @@
                 // Add User Bubble
                 const bubble = document.createElement('div');
                 bubble.className = "chat-bubble msg-user";
-                bubble.innerHTML = `<strong>You:</strong><br>${text}`;
+                bubble.innerHTML = `<strong>You:</strong><br>${escapeHtml(text)}`;
                 cw.appendChild(bubble);
                 cw.scrollTop = cw.scrollHeight;
 

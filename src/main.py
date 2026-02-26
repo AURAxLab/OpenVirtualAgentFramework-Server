@@ -97,7 +97,8 @@ async def get_llm_config():
     return {
         "active_provider": orchestrator.active_llm_id,
         "available_providers": list(orchestrator.llm_providers.keys()),
-        "system_prompt": orchestrator.system_prompt
+        "system_prompt": orchestrator.system_prompt,
+        "tts_enabled": orchestrator.tts_enabled
     }
 
 @app.post("/api/llm/config")
