@@ -46,19 +46,19 @@ The **Open Virtual Agent Framework (OAF)** is a server that sits between AI prov
 ┌─────────────────────────────────────────────────────────────────┐
 │  OAF Server (FastAPI + Uvicorn)                                 │
 │  ───────────────────────────────                                │
-│  ┌───────────┐  ┌──────────────┐  ┌──────────────┐             │
-│  │  Router   │──│ Orchestrator │──│  Providers   │             │
-│  │           │  │              │  │              │             │
-│  │ • Validate│  │ • STT → LLM │  │ • OpenAI LLM │             │
-│  │ • Route   │  │ • LLM → TTS │  │ • Gemini LLM │             │
-│  │ • Broadcast│ │ • History    │  │ • OpenAI TTS │             │
-│  │           │  │ • Actions    │  │ • Gemini TTS │             │
-│  └───────────┘  └──────────────┘  │ • OpenAI STT │             │
-│                                    └──────────────┘             │
-│  ┌───────────┐  ┌──────────────┐  ┌──────────────┐             │
-│  │ ZMQ Layer │  │  WS Layer    │  │  Telemetry   │             │
-│  │ (XR apps) │  │  (Web/WoZ)   │  │  (CSV/JSON)  │             │
-│  └───────────┘  └──────────────┘  └──────────────┘             │
+│  ┌───────────┐  ┌──────────────┐  ┌──────────────┐              │
+│  │  Router   │──│ Orchestrator │──│  Providers   │              │
+│  │           │  │              │  │              │              │
+│  │ • Validate│  │ • STT → LLM  │  │ • OpenAI LLM │              │
+│  │ • Route   │  │ • LLM → TTS  │  │ • Gemini LLM │              │
+│  │ • Broadcast│ │ • History    │  │ • OpenAI TTS │              │
+│  │           │  │ • Actions    │  │ • Gemini TTS │              │
+│  └───────────┘  └──────────────┘  │ • OpenAI STT │              │
+│                                   └──────────────┘              │
+│  ┌───────────┐  ┌──────────────┐  ┌──────────────┐              │
+│  │ ZMQ Layer │  │  WS Layer    │  │  Telemetry   │              │
+│  │ (XR apps) │  │  (Web/WoZ)   │  │  (CSV/JSON)  │              │
+│  └───────────┘  └──────────────┘  └──────────────┘              │
 └────────────────────┬────────────────────────────────────────────┘
                      │ WebSocket (HTTP :8000)
                      ▼
