@@ -103,21 +103,22 @@ class CommandRouter:
                  std_log.warning(f"⚠️ Router: llm_request received but no orchestrator or missing text")
              return
              
-        # Otherwise (normal WoZ commands, TTS chunks returning, agent actions), broadcast them to all transports
-        await self.broadcast(command)
+        # Otherwise (normal WoZ commands, TTS chunks returning, agent actions), dispatch them
+        await self.dispatch_outbound(command)
 
-    async def broadcast(self, command: BaseCommand):
-        """Funnels a validated command down to all active transport layers."""
+    async def dispatch_outbound(self, command: BaseCommand):
+        """Funnels a validated command down to all active transport layers using targeted messaging."""
         telemetry.log_interaction(command)
-        std_log.info(f"📡 Router: Broadcasting | type={command.command_type} cmd={command.command} to {len(self._transports)} transports")
+        std_log.info(f"📡 Router: Dispatching | type={command.command_type} cmd={command.command} target={command.target_device} to {len(self._transports)} transports")
         
         json_payload = command.to_json()
         
         # Use a generic 'framework.cmd' topic for ZMQ or WS envelopes
-        topic = "framework.cmd" 
         
-        tasks = [transport.publish(topic, json_payload) for transport in self._transports]
-        if tasks:
-            await asyncio.gather(*tasks)
+        for transport in self._transports:
+            # We skip the WoZ ws logic here since WS handles it internally via the client dict
+            # We pass the target_device down to the transport explicitly
+            await transport.send(command.target_device, command.command_type, json_payload)
+        
 
 router = CommandRouter()

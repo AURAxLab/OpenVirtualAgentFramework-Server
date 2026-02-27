@@ -426,8 +426,10 @@
         // Connect to WebSocket
         function connectWS() {
             // Use relative path so it works regardless of host
-            const wsUrl = `ws://${window.location.host}/ws`;
-            ws = new WebSocket(wsUrl);
+            // Explicitly identify as woz_console to receive targeted messages
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUri = `${protocol}//${window.location.host}/ws/client/woz_console`;
+            ws = new WebSocket(wsUri);
 
             ws.onopen = () => {
                 document.getElementById('ws-status').className = 'badge bg-success';

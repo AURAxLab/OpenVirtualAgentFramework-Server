@@ -152,15 +152,16 @@ async def export_telemetry():
         return FileResponse(path=csv_path, filename=csv_path.name, media_type='text/csv')
     return {"error": "Failed to generate CSV export."}
 
-@app.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket):
+@app.websocket("/ws/client/{client_id}")
+async def websocket_endpoint(websocket: WebSocket, client_id: str):
     """
     Client entrypoint for the Wizard of Oz panel or Web Agents.
-    Hands the connection over to the WS Transport Layer.
+    Hands the connection over to the WS Transport Layer so it can track
+    who is sending or receiving commands.
     """
-    await ws_transport.connect(websocket)
+    await ws_transport.connect(websocket, client_id)
     # Block and listen to this specific socket
-    await ws_transport.handle_incoming(websocket)
+    await ws_transport.handle_incoming(websocket, client_id)
 
 # --- System Logs Streamer ---
 

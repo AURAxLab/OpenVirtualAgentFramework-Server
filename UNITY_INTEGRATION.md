@@ -19,6 +19,7 @@ Best for Meta Quest, WebGL, and mobile builds.
 ### Option B: ZeroMQ (Local/PCVR)
 Best for low-latency desktop VR (PCVR) running on the same network or local machine.
 - **PUB/SUB Port**: `tcp://<server_ip>:5555` (Subscribe to receive commands from the server).
+  - *Note*: You MUST subscribe to your specific `device_id` AND the `"all"` topic. Otherwise, you will not receive messages.
 - **REQ/REP Port**: `tcp://<server_ip>:5556` (Send requests to the server).
 - **Unity Package**: [NetMQ](https://github.com/zeromq/netmq) via NuGet.
 
@@ -136,7 +137,7 @@ In Unity, parse the `subcommand`, look for `emotion` or `animation`, and trigger
 
 ## 4. Implementation Steps for Unity Dev
 
-1. **Connect**: Open a standard WebSocket connection to `ws://server_ip:8000/ws/client/quest_vr_01`.
+1. **Connect**: Open a standard WebSocket connection to `ws://server_ip:8000/ws/client/quest_vr_01` (Replace `quest_vr_01` with your actual device ID).
 2. **Handle OnMessage**: Parse incoming text as JSON. Switch based on `command_type` and `command`.
 3. **Audio Playback**: Use `Convert.FromBase64String()` on the incoming `tts_chunk` payloads. Pipe the byte arrays into a Unity AudioClip or use the Meta MR Utility Kit's audio streaming tools.
 4. **Lip Sync**: Attach a script (like Oculus OVRLipSync) to the AudioSource playing the TTS so the avatar's mouth moves automatically with the audio.

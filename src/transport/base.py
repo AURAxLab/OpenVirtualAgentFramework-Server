@@ -45,6 +45,9 @@ class BaseTransport(ABC):
         pass
         
     @abstractmethod
-    async def publish(self, topic: str, message: str):
-        """Send a message/command out to connected clients."""
+    async def send(self, target_device: str, topic: str, message: str):
+        """Send a message/command out to connected clients.
+        If target_device is 'all', broadcast it. 
+        Otherwise, unicast it to the specific device.
+        """
         pass

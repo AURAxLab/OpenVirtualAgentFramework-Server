@@ -82,7 +82,10 @@ class ZMQTransport(BaseTransport):
         except Exception as e:
             logger.error("ZMQ Listener error", error=str(e))
 
-    async def publish(self, topic: str, message: str):
-        # Format: "Topic Payload"
-        await self.pub_socket.send_string(f"{topic} {message}")
-        logger.debug("ZMQ Published message", topic=topic, message_len=len(message))
+    async def send(self, target_device: str, topic: str, message: str):
+        # Format: "target_device topic payload"
+        # If target_device is "all", clients subscribing to "all" will get it.
+        # XR Clients should ideally subscribe to both their specific ID AND "all".
+        payload = f"{target_device} {topic} {message}"
+        await self.pub_socket.send_string(payload)
+        logger.debug("ZMQ Sent message", target=target_device, topic=topic, message_len=len(message))
