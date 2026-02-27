@@ -109,20 +109,31 @@ cp .env.example .env
 
 ### Run the Server
 
+To run the server with the graphical Wizard of Oz interface and LLM playground:
 ```bash
-python -m uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn src.main:app --host 0.0.0.0 --port 8000
 ```
 
-Open the **Wizard-of-Oz Console** at: [http://localhost:8000](http://localhost:8000)
+### Headless Monitoring Mode
+If you are running the server in production or on a machine where the 3D GUI is unnecessary, you can start it in headless mode. This serves a lightweight, high-performance monitoring dashboard instead:
+
+**Windows (PowerShell):**
+```powershell
+$env:OAF_HEADLESS="true"; uvicorn src.main:app --host 0.0.0.0 --port 8000
+```
+
+**Linux / macOS:**
+```bash
+OAF_HEADLESS=true uvicorn src.main:app --host 0.0.0.0 --port 8000
+```
 
 ---
 
-## 🎮 WoZ Console Features
+## 🏗️ Architecture
 
-The built-in web console provides a full research interface with three tabs:
-
-### 🕹️ Remote XR Control
-Send commands directly to connected XR devices — trigger emotions, actions, gaze targets, and direct TTS messages in real time.
+1.  **Transport Layer**: `ZMQTransport` and `WebSocketTransport` handle raw JSON bytes asynchronously.
+2.  **Command Router**: Parses incoming standard `BaseCommand` JSON schemas, validates against `config.yaml`, and logs them.
+3.  **Dialog Orchestrator**: Manages AI conversations, injecting history and triggering the correct providers.vices — trigger emotions, actions, gaze targets, and direct TTS messages in real time.
 
 ### 💬 LLM Playground
 Interactive chat interface for testing the AI pipeline:

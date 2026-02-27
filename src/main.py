@@ -235,10 +235,20 @@ logging.getLogger("oaf.openai").setLevel(logging.DEBUG)
 
 # --------------------------
 
-# Mount the static WoZ panel to the root URL
-# This allows researchers to visit http://localhost:8000 and immediately see the control panel
+# Mount the UI based on OAF_HEADLESS mode
+# If headless is set, the root URL will serve a lightweight dashboard instead of the full 3D WoZ Console
 static_path = os.path.join(os.path.dirname(__file__), "static")
+headless_mode = os.environ.get("OAF_HEADLESS", "").lower() in ["true", "1", "yes"]
+
 if os.path.exists(static_path):
-    app.mount("/", StaticFiles(directory=static_path, html=True), name="static")
+    if headless_mode:
+        logger.info("Starting in HEADLESS mode. Full WoZ console & 3D Avatar are disabled.")
+        @app.get("/")
+        async def serve_headless():
+            return FileResponse(os.path.join(static_path, "headless.html"))
+        app.mount("/static", StaticFiles(directory=static_path), name="static")
+    else:
+        # Default Mode: Serve the full UI at root
+        app.mount("/", StaticFiles(directory=static_path, html=True), name="static")
 else:
-    logger.warning("Static directory not found. WoZ Panel will not be available.", path=static_path)
+    logger.warning("Static directory not found. UI will not be available.", path=static_path)
