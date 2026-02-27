@@ -9,7 +9,7 @@
 <h1 align="center">🧬 Open Virtual Agent Framework — Server</h1>
 
 <p align="center">
-  <strong>A modular, research-oriented server for driving embodied virtual agents in XR environments, with real-time AI orchestration, multi-provider LLM/TTS support, and a built-in Wizard-of-Oz console.</strong>
+  <strong>A modular, research-oriented server for driving embodied virtual agents across Web, Mobile, and XR environments, featuring real-time AI orchestration, multi-provider LLM/TTS support, and a built-in Wizard-of-Oz console.</strong>
 </p>
 
 <p align="center">
@@ -20,14 +20,14 @@
 
 ## ✨ What is OAF?
 
-The **Open Virtual Agent Framework (OAF)** is a server that sits between AI providers (OpenAI, Google Gemini) and XR client applications (Unity, Unreal, Web) to orchestrate the behavior of embodied virtual agents. It provides:
+The **Open Virtual Agent Framework (OAF)** is a server that sits between AI providers (OpenAI, Google Gemini) and client applications (Web, Mobile, Unity, Unreal) to orchestrate the behavior of embodied virtual agents. It provides:
 
 - 🧠 **Multi-provider LLM** — Hot-swap between OpenAI and Gemini mid-conversation
 - 🔊 **Multi-provider TTS** — Auto-matched to active LLM (OpenAI voices + Gemini voices)
-- 🎙️ **STT** — Speech-to-text transcription from XR client audio
-- 🧑 **3D Avatar** — Lip-synced, emotion-reactive embodied agent rendered in-browser
+- 🎙️ **STT** — Speech-to-text transcription from client microphone audio
+- 🧑 **3D Avatar** — Lip-synced, emotion-reactive embodied agent via `@oaf/web-client`
 - 🎮 **Wizard-of-Oz Console** — Full web dashboard for researchers to monitor and control experiments
-- 📡 **Dual Transport** — ZeroMQ (low-latency XR) + WebSocket (web clients)
+- 📡 **Dual Transport** — WebSocket (Web/Mobile) + ZeroMQ (low-latency XR engines)
 - 📊 **Telemetry & Logging** — Structured event capture with CSV export
 
 ---
