@@ -244,7 +244,7 @@ if os.path.exists(static_path):
         @app.get("/")
         async def serve_headless():
             return FileResponse(os.path.join(static_path, "headless.html"))
-        app.mount("/static", StaticFiles(directory=static_path), name="static")
+        app.mount("/", StaticFiles(directory=static_path, html=False), name="static")
     else:
         # Default Mode: Serve the full UI at root
         app.mount("/", StaticFiles(directory=static_path, html=True), name="static")
