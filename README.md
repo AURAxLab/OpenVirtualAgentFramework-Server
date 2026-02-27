@@ -63,13 +63,11 @@ The **Open Virtual Agent Framework (OAF)** is a server that sits between AI prov
                      │ WebSocket (HTTP :8000)
                      ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  WoZ Console (Browser)                                          │
-│  ─────────────────────                                          │
-│  • LLM Playground with chat                                     │
-│  • 3D Avatar with lip sync + emotions (Three.js + VRM)          │
-│  • Real-time system logs                                        │
-│  • Remote XR control panel                                      │
-│  • Telemetry export                                             │
+│  Web/Mobile Native Clients (React, Vue, Flutter, iOS)           │
+│  ────────────────────────────────────────────────────           │
+│  • Import @oaf/web-client SDK (oaf-client.js)                   │
+│  • Embeds the Voice, Mic (STT), and VRM Avatar seamlessly       │
+│  • WoZ Console & Dashboard natively relies on it                │
 └─────────────────────────────────────────────────────────────────┘
 ```
 

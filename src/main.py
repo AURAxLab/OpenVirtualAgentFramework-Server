@@ -230,9 +230,6 @@ logging.getLogger("uvicorn.error").addHandler(ws_logger)
 logging.getLogger("uvicorn.error").addHandler(file_handler)
 logging.getLogger("fastapi").addHandler(ws_logger)
 logging.getLogger("fastapi").addHandler(file_handler)
-logging.getLogger("oaf.openai").addHandler(ws_logger)
-logging.getLogger("oaf.openai").addHandler(file_handler)
-logging.getLogger("oaf.openai").setLevel(logging.DEBUG)
 
 # --------------------------
 
