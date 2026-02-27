@@ -129,11 +129,20 @@ OAF_HEADLESS=true uvicorn src.main:app --host 0.0.0.0 --port 8000
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Architecture & Scaling
 
-1.  **Transport Layer**: `ZMQTransport` and `WebSocketTransport` handle raw JSON bytes asynchronously.
+1.  **Transport Layer**: `ZMQTransport` and `WebSocketTransport` handle raw JSON bytes asynchronously. Both support **Unicast Targeted Routing**, allowing multiple XR headsets to connect to the same server simultaneously without crossing audio or action streams.
 2.  **Command Router**: Parses incoming standard `BaseCommand` JSON schemas, validates against `config.yaml`, and logs them.
-3.  **Dialog Orchestrator**: Manages AI conversations, injecting history and triggering the correct providers.vices — trigger emotions, actions, gaze targets, and direct TTS messages in real time.
+3.  **Dialog Orchestrator**: Manages AI conversations, injecting history and triggering the correct providers.
+
+> **Running Multiple Quest 3s?** 
+> Check out the [Scaling Section in the Unity Integration Guide](UNITY_INTEGRATION.md#3-scaling-multiple-headsets--multiple-servers) for details on how to add devices to `config.yaml` and load balance across multiple Server IPs.
+
+---
+
+## 🎮 WoZ Console Features
+
+The built-in web console provides a full research interface with two tabs:
 
 ### 💬 LLM Playground
 Interactive chat interface for testing the AI pipeline:

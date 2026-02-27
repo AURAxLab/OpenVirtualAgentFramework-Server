@@ -49,7 +49,39 @@ Every message sent to or received from the OAF Server uses a strict JSON schema 
 
 ---
 
-## 3. Core Workflows
+## 3. Scaling: Multiple Headsets & Multiple Servers
+
+The OAF Server architecture supports scaling up to accommodate multiple users.
+
+### Scenario A: Multiple Quest 3s connecting to ONE Server
+If you have three users in the same physical space (or remote) connecting to the same embodied agent, you must configure the server to recognize them.
+1. Open the server's `config.yaml`.
+2. Under the `devices` array, add the new headsets:
+```yaml
+devices:
+  - id: "quest_vr_01"
+    name: "Player 1 VR Headset"
+  - id: "quest_vr_02"
+    name: "Player 2 VR Headset"
+  - id: "quest_vr_03"
+    name: "Player 3 VR Headset"
+```
+3. In Unity, modify the connecting script for each headset to use its specific `device_id`.
+   - **WebSocket:** Connect to `ws://server_ip:8000/ws/client/quest_vr_02`.
+   - **ZeroMQ:** Subscribe to the `"quest_vr_02"` topic AND the `"all"` topic. Set the `sender` in JSON payloads to `"quest_vr_02"`.
+4. The server will now automatically route actions and audio **only** to the headset that is currently interacting with the agent. 
+
+### Scenario B: Multiple Quest 3s connecting to MULTIPLE Servers (Load Balancing)
+LLMs and TTS generation require significant processing. If you have 10 headsets, one server might bottleneck.
+1. Deploy the OAF Server codebase onto multiple physical machines or cloud instances (e.g., Server A at `192.168.1.10`, Server B at `192.168.1.20`).
+2. Group your headsets in Unity. 
+   - Headsets 1-5 connect their WebSockets to `ws://192.168.1.10:8000/...`
+   - Headsets 6-10 connect their WebSockets to `ws://192.168.1.20:8000/...`
+3. Because OAF is stateless between requests (the conversation history memory is maintained in the Orchestrator per server instance), each server runs its own independent AI agent. No special configuration is needed; just point the Unity clients to the IP address of the server you want them to talk to.
+
+---
+
+## 4. Core Workflows
 
 ### A. Sending Voice (Microphone to STT)
 When the user speaks, record the microphone data in Unity, convert it to a `.WAV` byte array, encode it in Base64, and send it to the server.
