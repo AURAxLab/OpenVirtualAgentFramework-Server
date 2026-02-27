@@ -15,33 +15,35 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { VRMLoaderPlugin, VRMUtils, VRMExpressionPresetName } from '@pixiv/three-vrm';
 
-const AvatarController = {
-    // Internal state
-    _scene: null,
-    _camera: null,
-    _renderer: null,
-    _vrm: null,
-    _clock: new THREE.Clock(),
-    _canvas: null,
-    _animationId: null,
+export default class AvatarController {
+    constructor() {
+        // Internal state
+        this._scene = null;
+        this._camera = null;
+        this._renderer = null;
+        this._vrm = null;
+        this._clock = new THREE.Clock();
+        this._canvas = null;
+        this._animationId = null;
 
-    // Lip sync
-    _audioContext: null,
-    _analyser: null,
-    _dataArray: null,
-    _isLipSyncing: false,
-    _audioElement: null,
-    _currentMouthOpen: 0, // Smoothed mouth value
+        // Lip sync
+        this._audioContext = null;
+        this._analyser = null;
+        this._dataArray = null;
+        this._isLipSyncing = false;
+        this._audioElement = null;
+        this._currentMouthOpen = 0; // Smoothed mouth value
 
-    // Emotion state
-    _currentEmotion: 'neutral',
-    _targetEmotion: 'neutral',
-    _emotionBlend: 0,
+        // Emotion state
+        this._currentEmotion = 'neutral';
+        this._targetEmotion = 'neutral';
+        this._emotionBlend = 0;
 
-    // Blink
-    _nextBlinkTime: 0,
-    _isBlinking: false,
-    _blinkProgress: 0,
+        // Blink
+        this._nextBlinkTime = 0;
+        this._isBlinking = false;
+        this._blinkProgress = 0;
+    }
 
     /**
      * Initialize the 3D scene on a canvas element.
@@ -97,7 +99,7 @@ const AvatarController = {
         // Start render loop
         this._animate();
         console.log('[Avatar] Scene initialized');
-    },
+    }
 
     /**
      * Load a VRM model from a URL.
@@ -165,7 +167,7 @@ const AvatarController = {
                 }
             );
         });
-    },
+    }
 
     /**
      * Set the avatar to a natural rest pose (arms down, relaxed).
@@ -201,7 +203,7 @@ const AvatarController = {
         rotateBone('head', 0, -0.1, 0);    // Head faces forward
 
         console.log('[Avatar] Rest pose applied');
-    },
+    }
 
     /**
      * Frame the camera to focus on the avatar's upper body.
@@ -221,7 +223,7 @@ const AvatarController = {
                 this._camera.lookAt(0.05, headPos.y - 0.03, 0);
             }
         }
-    },
+    }
 
     /**
      * Connect an <audio> element for lip sync analysis.
@@ -259,7 +261,7 @@ const AvatarController = {
         } catch (e) {
             console.warn('[Avatar] Lip sync setup failed:', e.message);
         }
-    },
+    }
 
     /**
      * Set the avatar's emotion expression.
@@ -268,7 +270,7 @@ const AvatarController = {
         const normalized = (emotionName || 'neutral').toLowerCase();
         this._targetEmotion = normalized;
         console.log(`[Avatar] Emotion set: ${normalized}`);
-    },
+    }
 
     /**
      * Main animation loop.
@@ -300,7 +302,7 @@ const AvatarController = {
         }
 
         this._renderer.render(this._scene, this._camera);
-    },
+    }
 
     /**
      * Breathing: move spine slightly up/down for visible chest movement.
@@ -315,7 +317,7 @@ const AvatarController = {
             const breathPhase = Math.sin(elapsed * 1.6);
             spine.rotation.x = breathPhase * 0.008;
         }
-    },
+    }
 
     /**
      * Natural blink: random intervals, quick close/open.
@@ -347,7 +349,7 @@ const AvatarController = {
 
             expr.setValue(VRMExpressionPresetName.Blink, blinkValue);
         }
-    },
+    }
 
     /**
      * Lip sync: map audio frequency to mouth open blend shape.
@@ -395,7 +397,7 @@ const AvatarController = {
         // Apply to blend shapes
         expr.setValue(VRMExpressionPresetName.Aa, this._currentMouthOpen * 0.7);
         expr.setValue(VRMExpressionPresetName.Oh, this._currentMouthOpen * 0.2);
-    },
+    }
 
     /**
      * Map emotion names to VRM expressions with smooth blending.
@@ -435,7 +437,7 @@ const AvatarController = {
                 expr.setValue(preset, this._emotionBlend * 0.7);
             }
         }
-    },
+    }
 
     /**
      * Subtle head sway for more natural idle appearance.
@@ -452,7 +454,7 @@ const AvatarController = {
             head.rotation.x = Math.sin(elapsed * 0.5 + 1) * 0.008;
             head.rotation.z = Math.sin(elapsed * 0.4 + 2) * 0.004;
         }
-    },
+    }
 
     /**
      * Handle canvas resize.
@@ -466,7 +468,7 @@ const AvatarController = {
         this._camera.aspect = width / height;
         this._camera.updateProjectionMatrix();
         this._renderer.setSize(width, height);
-    },
+    }
 
     /**
      * Clean up all resources.
@@ -479,6 +481,4 @@ const AvatarController = {
         if (this._audioContext) this._audioContext.close();
         console.log('[Avatar] Disposed');
     }
-};
-
-export default AvatarController;
+}

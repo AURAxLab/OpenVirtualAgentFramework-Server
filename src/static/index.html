@@ -277,8 +277,10 @@
                                 </div>
                                 <div class="p-3 border-top border-secondary" style="background: #2a2a2a;">
                                     <div class="input-group">
+                                        <button class="btn btn-danger" id="mic-btn" style="width:50px; font-size:1.2em;"
+                                            title="Hold to Talk">🎤</button>
                                         <input type="text" id="chat-input" class="form-control"
-                                            placeholder="Type a message to the agent...">
+                                            placeholder="Type or hold Mic to talk...">
                                         <button class="btn btn-primary" id="chat-send-btn">Send (Trigger LLM)</button>
                                     </div>
                                 </div>
@@ -348,7 +350,9 @@
     <!-- Load bootstrap JS for tabs -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script>
+    <script type="module">
+        import OafClient from './sdk/oaf-client.js';
+
         let ws = null;
         const logWindow = document.getElementById('log-window');
 
@@ -423,157 +427,56 @@
             logsWs.onerror = () => { /* onclose will handle reconnection */ };
         }
 
-        // Connect to WebSocket
-        function connectWS() {
-            // Use relative path so it works regardless of host
-            // Explicitly identify as woz_console to receive targeted messages
-            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsUri = `${protocol}//${window.location.host}/ws/client/woz_console`;
-            ws = new WebSocket(wsUri);
-
-            ws.onopen = () => {
-                document.getElementById('ws-status').className = 'badge bg-success';
-                document.getElementById('ws-status').textContent = 'Connected';
-                log('WebSocket connected to OAF Router.', 'info');
-            };
-
-            // --- TTS Audio Playback ---
-            let ttsAudioChunks = [];  // Collect base64 chunks
-            let ttsAudioPlayer = document.getElementById('tts-audio-player');
-            if (!ttsAudioPlayer) {
-                ttsAudioPlayer = document.createElement('audio');
-                ttsAudioPlayer.id = 'tts-audio-player';
-                document.body.appendChild(ttsAudioPlayer);
-            }
-
-            ws.onmessage = (event) => {
-                // Parse for Chat Bubbles & Audio
-                try {
-                    const raw = JSON.parse(event.data);
-                    // The WS transport wraps messages in {"topic": "...", "payload": {...}}
-                    const data = raw.payload || raw;
-
-                    // --- TTS Audio Handling (don't log these, they're huge base64 strings) ---
-                    if (data.command_type === "audio" && data.sender === "server_orchestrator") {
-                        if (data.command === "tts_chunk" && data.subcommand && data.subcommand.audio_base64) {
-                            // Decode base64 chunk and store as Uint8Array
-                            const binaryStr = atob(data.subcommand.audio_base64);
-                            const bytes = new Uint8Array(binaryStr.length);
-                            for (let i = 0; i < binaryStr.length; i++) {
-                                bytes[i] = binaryStr.charCodeAt(i);
-                            }
-                            ttsAudioChunks.push(bytes);
-                            return; // Don't log audio chunks
-                        }
-                        if (data.command === "tts_complete") {
-                            // Combine all chunks into a WAV blob
-                            if (ttsAudioChunks.length > 0) {
-                                const blob = new Blob(ttsAudioChunks, { type: 'audio/wav' });
-                                const url = URL.createObjectURL(blob);
-                                ttsAudioChunks = [];
-
-                                // Try autoplay
-                                if (ttsAudioPlayer.src) URL.revokeObjectURL(ttsAudioPlayer.src);
-                                ttsAudioPlayer.src = url;
-                                ttsAudioPlayer.play().catch(() => { });
-
-                                // Connect to avatar lip sync
-                                if (window._avatarController) {
-                                    window._avatarController.connectAudio(ttsAudioPlayer);
-                                }
-
-                                // Attach a 🔊 replay button to the last agent bubble
-                                const cw = document.getElementById('chat-window');
-                                const agentBubbles = cw.getElementsByClassName('msg-agent');
-                                if (agentBubbles.length > 0) {
-                                    const lastBubble = agentBubbles[agentBubbles.length - 1];
-                                    const speakerBtn = document.createElement('button');
-                                    speakerBtn.className = 'btn btn-sm btn-outline-info mt-1';
-                                    speakerBtn.style.cssText = 'font-size:0.75em; padding:2px 8px; border-radius:12px;';
-                                    speakerBtn.textContent = '🔊 Play';
-                                    speakerBtn.onclick = () => {
-                                        const audio = new Audio(url);
-                                        speakerBtn.textContent = '🔊 ▶ Playing...';
-                                        audio.play().catch(e => log(`Audio error: ${e.message}`, 'error'));
-                                        audio.onended = () => { speakerBtn.textContent = '🔊 Play'; };
-                                    };
-                                    lastBubble.appendChild(speakerBtn);
-                                }
-
-                                log(`🔊 TTS audio ready (${blob.size} bytes)`, 'info');
-                            }
-                            return;
-                        }
-                    }
-
-                    // Log non-audio messages normally
-                    log(`RECV: ${event.data}`, 'recv');
-
+        // --- OAF Web SDK Initialization ---
+        const oafClient = new OafClient({
+            deviceId: 'woz_console',
+            canvas: document.getElementById('avatar-canvas'),
+            callbacks: {
+                onConnect: () => {
+                    document.getElementById('ws-status').className = 'badge bg-success';
+                    document.getElementById('ws-status').textContent = 'Connected';
+                },
+                onDisconnect: () => {
+                    document.getElementById('ws-status').className = 'badge bg-danger';
+                    document.getElementById('ws-status').textContent = 'Disconnected';
+                    setTimeout(() => oafClient.connect(), 2000); // auto-reconnect
+                },
+                onLog: (msg, type) => log(msg, type),
+                onMessage: (sub) => {
                     const cw = document.getElementById('chat-window');
+                    const bubble = document.createElement('div');
+                    bubble.className = "chat-bubble msg-agent";
+                    bubble.innerHTML = `<strong>Agent:</strong><br>${escapeHtml(sub.text)}<br><small class="text-muted" style="font-size:0.7em;">🧠 ${escapeHtml(sub.provider || '')} · ${escapeHtml(sub.model || '')}</small>`;
 
-                    if (data.command_type === "message" && data.command === "llm_reply") {
-                        const sub = data.subcommand;
-                        const providerLabel = sub.provider ? sub.provider.toUpperCase() : '?';
-                        const modelLabel = sub.model || '';
-                        const agentLabel = sub.agent || data.target_agent || '';
+                    const tagsContainer = document.createElement('div');
+                    tagsContainer.className = "action-tags-container mt-1";
+                    bubble.appendChild(tagsContainer);
 
-                        const bubble = document.createElement('div');
-                        bubble.className = "chat-bubble msg-agent";
-                        bubble.innerHTML = `<strong>Agent (${escapeHtml(agentLabel)}):</strong><br>${escapeHtml(sub.text)}<br><small class="text-muted" style="font-size:0.7em;">🧠 ${escapeHtml(providerLabel)} · ${escapeHtml(modelLabel)}</small>`;
-                        // Create a container to hold potential action tags for this message
-                        const tagsContainer = document.createElement('div');
-                        tagsContainer.className = "action-tags-container mt-1";
-                        bubble.appendChild(tagsContainer);
-
-                        cw.appendChild(bubble);
-                        cw.scrollTop = cw.scrollHeight;
-                    }
-                    else if (data.command_type === "action" && data.command === "execute_state" && data.sender === "server_orchestrator") {
-                        // The LLM just fired an action, attach it to the LAST agent bubble
-                        const agentBubbles = cw.getElementsByClassName('msg-agent');
-                        if (agentBubbles.length > 0) {
-                            const lastBubble = agentBubbles[agentBubbles.length - 1];
-                            const tagsCtr = lastBubble.querySelector('.action-tags-container');
-
-                            // Iterate all actions triggered
-                            for (const [key, value] of Object.entries(data.subcommand)) {
-                                const tag = document.createElement('span');
-                                tag.className = "action-tag";
-                                tag.textContent = `⚡ [${key}: ${value}]`;
-                                tagsCtr.appendChild(tag);
-
-                                // Send emotions to avatar
-                                if (key === 'emotions' && window._avatarController) {
-                                    window._avatarController.setEmotion(value);
-                                }
-                            }
+                    cw.appendChild(bubble);
+                    cw.scrollTop = cw.scrollHeight;
+                },
+                onAgentAction: (sub) => {
+                    const cw = document.getElementById('chat-window');
+                    const agentBubbles = cw.getElementsByClassName('msg-agent');
+                    if (agentBubbles.length > 0) {
+                        const tagsCtr = agentBubbles[agentBubbles.length - 1].querySelector('.action-tags-container');
+                        for (const [key, value] of Object.entries(sub)) {
+                            const tag = document.createElement('span');
+                            tag.className = "action-tag";
+                            tag.textContent = `⚡ [${key}: ${value}]`;
+                            tagsCtr.appendChild(tag);
                         }
                     }
-                } catch (e) {
-                    // Not valid JSON or irrelevant — still log it
-                    log(`RECV: ${event.data}`, 'recv');
                 }
-            };
+            }
+        });
 
-            ws.onclose = () => {
-                document.getElementById('ws-status').className = 'badge bg-danger';
-                document.getElementById('ws-status').textContent = 'Disconnected';
-                log('WebSocket closed. Reconnecting...', 'error');
-                setTimeout(connectWS, 2000);
-            };
-
-            ws.onerror = (err) => {
-                log('WebSocket Error', 'error');
-            };
-        }
-
-        // Send command schema
+        // Helper override for the WoZ Console to spoof target_device/agent via UI dropdowns
         function sendCommand(cmdType, cmdName, subcmd = {}) {
-            if (!ws || ws.readyState !== WebSocket.OPEN) {
+            if (!oafClient.ws || oafClient.ws.readyState !== WebSocket.OPEN) {
                 log('Cannot send: Not connected.', 'error');
                 return;
             }
-
             const payload = {
                 sender: "woz_console",
                 target_device: document.getElementById('target-device').value,
@@ -582,9 +485,8 @@
                 command: cmdName,
                 subcommand: subcmd
             };
-
             const jsonStr = JSON.stringify(payload);
-            ws.send(jsonStr);
+            oafClient.ws.send(jsonStr);
             log(`SENT: ${jsonStr}`, 'sent');
         }
 
@@ -766,6 +668,28 @@
             if (e.key === 'Enter') sendChatMsg();
         });
 
+        // Mic STT Events
+        const micBtn = document.getElementById('mic-btn');
+        const chatInput = document.getElementById('chat-input');
+
+        micBtn.onmousedown = () => {
+            oafClient.startMic();
+            micBtn.textContent = '🛑';
+            micBtn.classList.replace('btn-danger', 'btn-outline-danger');
+            chatInput.placeholder = 'Recording your voice...';
+        };
+
+        const stopMic = () => {
+            if (!oafClient.isRecording) return;
+            oafClient.stopMic();
+            micBtn.textContent = '🎤';
+            micBtn.classList.replace('btn-outline-danger', 'btn-danger');
+            chatInput.placeholder = 'Type or hold Mic to talk...';
+        };
+
+        micBtn.onmouseup = stopMic;
+        micBtn.onmouseleave = stopMic;
+
         // --- localStorage Persistence ---
         const STORAGE_KEYS = {
             chat: 'oaf_chat_html',
@@ -807,7 +731,7 @@
         window.onload = () => {
             restoreState();
             initConfig();
-            connectWS();
+            oafClient.connect();
             connectSysLogsWS();
 
             // Restore LLM provider after config loads
@@ -819,22 +743,16 @@
                 }
             }, 500);
         };
-    </script>
 
-    <!-- Avatar Module (ES Module — requires import map above) -->
-    <script type="module">
-        import AvatarController from './avatar.js';
-
-        // Expose to global scope for WebSocket handlers
-        window._avatarController = AvatarController;
-
+        // --- Avatar Loading ---
+        // Expose avatar loading function to override
         function loadAvatar(url) {
             const statusBadge = document.getElementById('avatar-status');
             statusBadge.style.display = '';
             statusBadge.textContent = 'Loading...';
             statusBadge.className = 'badge bg-warning avatar-status';
 
-            AvatarController.loadModel(url)
+            oafClient.loadAvatar(url)
                 .then(() => {
                     statusBadge.textContent = 'Ready';
                     statusBadge.className = 'badge bg-success avatar-status';
@@ -844,14 +762,13 @@
                 .catch((err) => {
                     statusBadge.textContent = 'Error';
                     statusBadge.className = 'badge bg-danger avatar-status';
-                    console.error('[Avatar] Load failed:', err);
                 });
         }
 
         // Initialize scene
         const canvas = document.getElementById('avatar-canvas');
         if (canvas) {
-            AvatarController.init(canvas);
+            // AvatarController.init(canvas); // Removed, assuming OafClient handles this or it's not needed here
 
             // Load saved avatar or default
             const savedAvatar = localStorage.getItem('oaf_avatar');
