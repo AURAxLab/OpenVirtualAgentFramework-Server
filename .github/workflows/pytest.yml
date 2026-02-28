@@ -31,7 +31,8 @@ jobs:
         
     - name: Test with pytest
       run: |
-        # Turn off headless to ensure all static assets load, use mock API keys
+        # Set PYTHONPATH so 'src' is importable from the project root
+        export PYTHONPATH="${GITHUB_WORKSPACE}"
         export OAF_TESTING=1
         export OPENAI_API_KEY="sk-dummy"
         export GEMINI_API_KEY="dummy"
