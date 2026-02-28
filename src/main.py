@@ -40,63 +40,67 @@ from pydantic import BaseModel
 
 logger = get_logger()
 
-# 1. Initialize Configuration
-config_manager.load_config()
+# 1. Initialize Configuration (skip in test mode — tests mock the config)
+if not os.getenv("OAF_TESTING"):
+    config_manager.load_config()
 
-# 2. Setup Transports
-zmq_transport = ZMQTransport(pub_port=5555, sub_port=5556)
-ws_transport = WebSocketTransport()
+    # 2. Setup Transports
+    zmq_transport = ZMQTransport(pub_port=5555, sub_port=5556)
+    ws_transport = WebSocketTransport()
 
-# Bind both to the router so messages flow bidirectionally everywhere
-router.add_transport(zmq_transport)
-router.add_transport(ws_transport)
+    # Bind both to the router so messages flow bidirectionally everywhere
+    router.add_transport(zmq_transport)
+    router.add_transport(ws_transport)
 
-# 3. Setup AI Orchestrator
-# (Requires API Keys in .env to function fully)
-stt_provider = OpenAISTTProvider()
-llm_providers = {
-    "openai": OpenAILLMProvider(),
-    "gemini": GeminiLLMProvider()
-}
-tts_provider = OpenAITTSProvider()
-gemini_tts_provider = GeminiTTSProvider()
+    # 3. Setup AI Orchestrator
+    # (Requires API Keys in .env to function fully)
+    stt_provider = OpenAISTTProvider()
+    llm_providers = {
+        "openai": OpenAILLMProvider(),
+        "gemini": GeminiLLMProvider()
+    }
+    tts_provider = OpenAITTSProvider()
+    gemini_tts_provider = GeminiTTSProvider()
 
-orchestrator = DialogOrchestrator(
-    stt_provider=stt_provider,
-    llm_providers=llm_providers,
-    tts_providers={
-        "openai": tts_provider,
-        "gemini": gemini_tts_provider
-    },
-    default_llm="openai"
-)
+    orchestrator = DialogOrchestrator(
+        stt_provider=stt_provider,
+        llm_providers=llm_providers,
+        tts_providers={
+            "openai": tts_provider,
+            "gemini": gemini_tts_provider
+        },
+        default_llm="openai"
+    )
 
-# Pipe the Router to the Orchestrator so audio commands trigger AI responses
-router.set_orchestrator(orchestrator)
+    # Pipe the Router to the Orchestrator so audio commands trigger AI responses
+    router.set_orchestrator(orchestrator)
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Lifecycle manager for FastAPI to start and stop background resources."""
-    logger.info("Starting OpenVirtualAgentFramework Server...", experiment=config_manager.config.experiment.name)
-    
-    # Start all registered transports
-    await zmq_transport.start()
-    await ws_transport.start()
-    
-    yield
-    
-    # Shutdown gracefully
-    await zmq_transport.stop()
-    await ws_transport.stop()
-    logger.info("OAF Server fully stopped.")
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        """Lifecycle manager for FastAPI to start and stop background resources."""
+        logger.info("Starting OpenVirtualAgentFramework Server...", experiment=config_manager.config.experiment.name)
+        
+        # Start all registered transports
+        await zmq_transport.start()
+        await ws_transport.start()
+        
+        yield
+        
+        # Shutdown gracefully
+        await zmq_transport.stop()
+        await ws_transport.stop()
+        logger.info("OAF Server fully stopped.")
 
-# 3. Initialize FastAPI App
-app = FastAPI(
-    title="OAF Server (Wizard of Oz & Gateway)",
-    description="OpenVirtualAgentFramework Routing Server",
-    version=config_manager.config.experiment.version,
-    lifespan=lifespan
-)
+    # 4. Initialize FastAPI App
+    app = FastAPI(
+        title="OAF Server (Wizard of Oz & Gateway)",
+        description="OpenVirtualAgentFramework Routing Server",
+        version=config_manager.config.experiment.version,
+        lifespan=lifespan
+    )
+else:
+    # Minimal app for testing — routes still get registered below
+    app = FastAPI(title="OAF Server (Test Mode)")
 
 # 4. HTTP and WebSocket Mounts
 @app.get("/api/config")
