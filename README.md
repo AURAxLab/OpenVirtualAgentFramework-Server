@@ -324,7 +324,7 @@ pytest tests/ -v
 
 ---
 
-## � Author
+## 👤 Author
 
 **Alexander Barquero Elizondo, Ph.D.**
 
@@ -336,6 +336,6 @@ Profesor e Investigador — ECCI / CITIC
 
 ---
 
-## �📜 License
+## 📜 License
 
 [MIT License](LICENSE) © 2026 [AURAxLab](https://github.com/AURAxLab)
